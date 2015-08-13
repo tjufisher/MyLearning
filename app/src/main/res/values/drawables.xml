@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <drawable name="window_bg">@color/window_bg</drawable>
+    <drawable name="divider_line">@color/dividerline</drawable>
+    <drawable name="pinggu_divider_line_butong">@color/line_eeeeee</drawable>
+    <drawable name="divider_line_price_dialog">@color/dividerline</drawable>
+    <drawable name="dividerline_maintab">@color/dividerline_maintab</drawable>
+    <drawable name="main_tab_bar_bg">@color/main_tab_bar_bg</drawable>
+    <drawable name="main_tab_btn_normal">@color/main_tab_btn_normal</drawable>
+    <drawable name="main_tab_btn_pressed">@color/main_tab_btn_pressed</drawable>
+    <drawable name="entrust_tab_btn_normal">@color/wuse</drawable>
+    <drawable name="entrust_tab_btn_pressed">@color/wuse</drawable>
+    <drawable name="header_bar_bg">@color/header_bar</drawable>
+    <drawable name="transparent">#00000000</drawable>
+
+</resources>
