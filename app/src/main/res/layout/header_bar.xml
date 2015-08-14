@@ -31,6 +31,26 @@
         android:textColor="@color/white"
         android:textSize="18sp" />
 
+    <Button
+        android:id="@+id/btn_right2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/btn_right"
+        android:text="地图"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btn_right1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dip"
+        android:background="@drawable/btn_right"
+        android:text="搜索"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/ll_header_right"
         android:layout_width="wrap_content"
@@ -41,25 +61,40 @@
         android:gravity="right|center_vertical"
         android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/btn_right2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/btn_right"
-            android:text="地图"
-            android:textColor="@color/white"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/btn_right1"
+        <ImageView
+            android:id="@+id/img_right1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dip"
-            android:background="@drawable/btn_right"
-            android:text="搜索"
-            android:textColor="@color/white"
+            android:textColor="@color/header_btn_text"
             android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="9dip" >
+
+            <ImageView
+                android:id="@+id/img_right2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dip"
+                android:textColor="@color/header_btn_text"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_remind_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="-15dp"
+                android:layout_toRightOf="@+id/img_right2"
+                android:gravity="center"
+                android:textColor="@color/header_bar"
+                android:textSize="12sp"
+                android:visibility="gone" />
+        </RelativeLayout>
 
     </LinearLayout>
 

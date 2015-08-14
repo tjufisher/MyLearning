@@ -26,8 +26,8 @@
         <activity android:name="com.handmark.pulltorefresh.samples.PullToRefreshListFragmentActivity"/>
         <activity android:name="com.handmark.pulltorefresh.samples.PullToRefreshWebView2Activity"/>
         <activity android:name="com.handmark.pulltorefresh.samples.PullToRefreshListInViewPagerActivity"/>
-        <activity android:name=".MainActivity"/>
-        <!--<activity android:name=".activity.SplashActivity"/>-->
+        <activity android:name=".activity.MainActivity"/>
+
 
     </application>
 
