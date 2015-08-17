@@ -232,4 +232,30 @@
     <color name="vpi_bright_foreground_disabled_holo_light">#ffb2b2b2</color>
     <color name="vpi_bright_foreground_inverse_holo_dark">@color/vpi_bright_foreground_holo_light</color>
     <color name="vpi_bright_foreground_inverse_holo_light">@color/vpi_bright_foreground_holo_dark</color>
+
+    <!-- 自定义颜色-->
+
+    <color name="mine_gray1">#ff323232</color>
+    <color name="mine_gray2">#ffcccccc</color>
+    <color name="mine_gray3">#ff888888</color>
+    <color name="mine_gray4">#ffeeeeee</color>
+
+    <color name="mine_white">#ffffffff</color>
+    <color name="mine_white1">#fff8f8f8</color>
+
+    <color name="mine_black1">#ff111111</color>
+
+    <color name="mine_yellow1">#ffd37c00</color>
+    <color name="mine_yellow2">#fffff5df</color>
+    <color name="mine_yellow3">#fff6cf71</color>
+
+    <color name="mine_pink">#ffff4978</color>
+    <color name="mine_green">#ff82c64f</color>
+
+    <color name="mine_red">#ffff0000</color>
+
+    <!-- 公共列表、item按下颜色 -->
+    <color name="common_item_pressed">#f7f7f7</color>
+    <!-- 公共列表、item正常颜色 -->
+    <color name="common_item_normal">#ffffffff</color>
 </resources>
