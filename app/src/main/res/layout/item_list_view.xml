@@ -5,10 +5,10 @@
     android:background="#888888"
     >
 
-    <ListView
-        android:id="@+id/lv_link"
+    <TextView
+        android:id="@+id/tv"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content"></TextView>
 
 
 

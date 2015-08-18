@@ -22,12 +22,7 @@ import butterknife.OnClick;
 
 public class HomeFragement extends Fragment {
     private Context mContext;
-    @InjectView(R.id.et)
-    EditText et;
-    @InjectView(R.id.vtv)
-    VerifyTextView vtv;
-    @InjectView(R.id.btn)
-    Button btn;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +34,7 @@ public class HomeFragement extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         UtilsLog.e(getClass().getName(), "create view");
+        mContext = getActivity();
         View view = inflater.inflate(R.layout.fragement_home, container, false);
         ButterKnife.inject(this, view);
         return view;
@@ -55,12 +51,5 @@ public class HomeFragement extends Fragment {
         ButterKnife.reset(this);
     }
 
-    @OnClick(R.id.btn)
-    public void verify(){
-        if(vtv.getmCode().trim().equals(et.getText().toString().trim())){
-            Toast.makeText(mContext, "right", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(mContext, "wrong", Toast.LENGTH_SHORT).show();
-        }
-    }
+
 }

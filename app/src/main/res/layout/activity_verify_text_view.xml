@@ -18,7 +18,24 @@
             android:hint="输入"
             android:textColor="@color/white"/>
 
-
+        <com.mylearning.view.VerifyTextView
+            android:id="@+id/vtv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:padding="5dp"
+            android:textSize="18sp"
+            android:textColor="#df3031"
+            android:background="@color/blue"
+            app:numLength="4"
+           />
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:textSize="14sp"
+            android:text="验证"/>
 
     </LinearLayout>
 

@@ -1,0 +1,17 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    >
+
+    <com.mylearning.view.RoundImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:insideRoundColor="@color/yellow"
+        app:outsideRoundColor="@color/red"
+        app:roundThickness="10dp"
+        android:src="@drawable/lml"/>
+
+
+</LinearLayout>

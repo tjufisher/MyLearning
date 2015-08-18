@@ -27,6 +27,8 @@
         <activity android:name="com.handmark.pulltorefresh.samples.PullToRefreshWebView2Activity"/>
         <activity android:name="com.handmark.pulltorefresh.samples.PullToRefreshListInViewPagerActivity"/>
         <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".example.VerifyTextViewActivity"/>
+        <activity android:name=".example.RoundImageViewActivity"/>
 
 
     </application>

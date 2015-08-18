@@ -1,6 +1,7 @@
 package com.mylearning.view;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -39,12 +40,15 @@ public class VerifyTextView extends TextView implements View.OnClickListener{
 
     public VerifyTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mCode = randomNum();
+
 
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.VerifyTextView);
-        bgColor = array.getColor(R.styleable.VerifyTextView_bgColor, Color.parseColor("#fea64b"));
-        fontColor = array.getColor(R.styleable.VerifyTextView_fontColor, Color.parseColor("#333333"));
-        fontSize = array.getDimension(R.styleable.VerifyTextView_fontSize, 14);
+        numLength = array.getInt(R.styleable.VerifyTextView_numLength, 4);
+        bgColor = array.getColor(R.styleable.VerifyTextView_android_background, Color.parseColor("#fea64b"));
+        fontColor = array.getColor(R.styleable.VerifyTextView_android_textColor, Color.parseColor("#333333"));
+        fontSize = array.getDimension(R.styleable.VerifyTextView_android_textSize, 14);
+
+        mCode = randomNum();
 
         mPaint = new Paint();
         mBound = new Rect();
