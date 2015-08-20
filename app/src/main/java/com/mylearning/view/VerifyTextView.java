@@ -1,7 +1,6 @@
 package com.mylearning.view;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,6 +11,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mylearning.R;
+import com.mylearning.annotation.MyAnnotation;
+import com.mylearning.utils.AnnotationUtils;
 
 import java.util.Random;
 
@@ -110,9 +111,16 @@ public class VerifyTextView extends TextView implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         mCode = randomNum();
+        try {
+            AnnotationUtils.getInstance().loadVlaue(MyAnnotation.class, "author",
+                    VerifyTextView.class.getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         postInvalidate();
     }
 
+    @MyAnnotation(author = "fisher")
     public String randomNum(){
         StringBuilder sb = new StringBuilder();
         Random random =  new Random();

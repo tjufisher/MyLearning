@@ -11,8 +11,8 @@ import android.util.DisplayMetrics;
  * @exception/throws [违例类型] [违例说明]
  * @see [类、类#方法、类#成员]
  */
-public class DensityUtil {
-    private static final String TAG = DensityUtil.class.getSimpleName();
+public class DensityUtils {
+    private static final String TAG = DensityUtils.class.getSimpleName();
 
     // 当前屏幕的densityDpi
     private static float dmDensityDpi = 0.0f;
@@ -24,7 +24,7 @@ public class DensityUtil {
      * 根据构造函数获得当前手机的屏幕系数
      *
      * */
-    public DensityUtil(Context context) {
+    public DensityUtils(Context context) {
         // 获取当前屏幕
         dm = new DisplayMetrics();
         dm = context.getApplicationContext().getResources().getDisplayMetrics();
@@ -32,7 +32,7 @@ public class DensityUtil {
         setDmDensityDpi(dm.densityDpi);
         // 密度因子
         scale = getDmDensityDpi() / 160;
-        UtilsLog.i(TAG, toString());
+        LogUtils.i(TAG, toString());
     }
 
     /**
@@ -51,7 +51,7 @@ public class DensityUtil {
      * @retrun DmDensity Setter
      * */
     public static void setDmDensityDpi(float dmDensityDpi) {
-        DensityUtil.dmDensityDpi = dmDensityDpi;
+        DensityUtils.dmDensityDpi = dmDensityDpi;
     }
 
     /**

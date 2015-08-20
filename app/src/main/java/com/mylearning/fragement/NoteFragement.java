@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.mylearning.R;
 import com.mylearning.entity.ClassLink;
-import com.mylearning.utils.UtilsLog;
+import com.mylearning.utils.LogUtils;
 
 import java.util.ArrayList;
 
@@ -37,7 +37,7 @@ public class NoteFragement extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        UtilsLog.e(getClass().getName(), "create view");
+        LogUtils.e(getClass().getName(), "create view");
         mContext = getActivity();
         View view = inflater.inflate(R.layout.fragement_note, container, false);
         ButterKnife.inject(this, view);

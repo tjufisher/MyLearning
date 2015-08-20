@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mylearning.R;
-import com.mylearning.utils.UtilsLog;
+import com.mylearning.utils.LogUtils;
 
 
 public class LocationFragement extends Fragment {
@@ -20,7 +20,7 @@ public class LocationFragement extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        UtilsLog.e(getClass().getName(), "create view");
+        LogUtils.e(getClass().getName(), "create view");
         View view = inflater.inflate(R.layout.fragement_location, container,false);
         return view;
     }

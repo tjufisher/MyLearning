@@ -11,7 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class UtilsLog {
+public class LogUtils {
 	/**
 	 * 是否开启日志
 	 */
@@ -58,10 +58,10 @@ public class UtilsLog {
 				: "http://coupon.fang.com/m/MyCoupon.html?From=APP&City=bj";//优惠券wap页URL
 		URL_ENTRUST_FINANCE = interfaceSwitch ? "http://m.test.fang.com/my/?c=myesf&a=getOpenCityList&"
 				: "http://m.fang.com/my/?c=myesf&a=jrfwIndex&";
-//		NetConstants.HTTP_URL = NetConstants.HTTP_SCHEME + "://" + UtilsLog.HTTP_HOST;
-//		NetConstants.HTTP_URL_ESF = NetConstants.HTTP_SCHEME + "://" + UtilsLog.HTTP_HOST_ESF;
-//		NetConstants.HTTP_URL_ZF = NetConstants.HTTP_SCHEME + "://" + UtilsLog.HTTP_HOST_ZF;
-//		NetConstants.HTTP_URL_HTTPS = NetConstants.HTTP_SAFETY_SCHEME + "://" + UtilsLog.HTTP_HOST;
+//		NetConstants.HTTP_URL = NetConstants.HTTP_SCHEME + "://" + LogUtils.HTTP_HOST;
+//		NetConstants.HTTP_URL_ESF = NetConstants.HTTP_SCHEME + "://" + LogUtils.HTTP_HOST_ESF;
+//		NetConstants.HTTP_URL_ZF = NetConstants.HTTP_SCHEME + "://" + LogUtils.HTTP_HOST_ZF;
+//		NetConstants.HTTP_URL_HTTPS = NetConstants.HTTP_SAFETY_SCHEME + "://" + LogUtils.HTTP_HOST;
 	}
 
 	/**
