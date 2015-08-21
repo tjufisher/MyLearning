@@ -46,7 +46,7 @@ public class WebUtils {
             {
                 strResponse += strLine + "\n";
             }
-            System.out.print(strResponse);
+            LogUtils.e("json", "WebUtils response:" + strResponse);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -60,7 +60,7 @@ public class WebUtils {
             sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
         }
         sb.deleteCharAt(sb.length()-1);
-        System.out.println("parameters:"+sb.toString());
+        LogUtils.e("json","WebUtils parameters:" + sb.toString());
         return sb.toString();
     }
 }

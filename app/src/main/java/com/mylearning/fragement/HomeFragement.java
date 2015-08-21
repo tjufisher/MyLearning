@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
@@ -27,7 +28,6 @@ import com.mylearning.utils.HttpApi;
 import com.mylearning.utils.LogUtils;
 import com.mylearning.utils.StringUtils;
 import com.mylearning.utils.VolleyUtils;
-import com.mylearning.view.WrapContentViewPager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,11 +39,12 @@ import butterknife.InjectView;
 
 
 public class HomeFragement extends Fragment {
+
+
     @InjectView(R.id.vp_ad)
-    WrapContentViewPager vpAd;
+    ViewPager vpAd;
     @InjectView(R.id.et)
     EditText et;
-
     private Context mContext;
     private ArrayList<String> adList;
     private GetHomeAdTask getHomeAdTask;
@@ -67,22 +68,23 @@ public class HomeFragement extends Fragment {
         return view;
     }
 
-    public void initDatas(){
+    public void initDatas() {
         adList = new ArrayList<String>();
-        if( getHomeAdTask != null){
+        if (getHomeAdTask != null) {
             getHomeAdTask.cancel(true);
         }
         getHomeAdTask = new GetHomeAdTask();
         getHomeAdTask.execute();
     }
 
-    public void registerLister(){
+    public void registerLister() {
 
 
     }
 
     /**
      * 设置广告viewpager信息
+     *
      * @param result
      */
     public void setAdData(ArrayList<String> result) {
@@ -104,7 +106,7 @@ public class HomeFragement extends Fragment {
         }
     }
 
-    public class HomeAdViewPager extends PagerAdapter{
+    public class HomeAdViewPager extends PagerAdapter {
         private ArrayList<String> adList;
 
         public HomeAdViewPager(ArrayList<String> adList) {
@@ -148,7 +150,7 @@ public class HomeFragement extends Fragment {
                 Bitmap mbigBitmap = BitmapFactory.decodeResource(
                         mContext.getResources(), R.drawable.home_ad);
 
-                if (android.os.Build.VERSION.SDK_INT >= 17) {
+                if (Build.VERSION.SDK_INT >= 17) {
                     imageView.setBackground(new BitmapDrawable(mContext
                             .getResources(), mbigBitmap));
                 } else {
@@ -174,7 +176,7 @@ public class HomeFragement extends Fragment {
 
     }
 
-    ViewPager.OnPageChangeListener onPageChangeListener =  new ViewPager.OnPageChangeListener() {
+    ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -191,7 +193,7 @@ public class HomeFragement extends Fragment {
         }
     };
 
-    public class GetHomeAdTask extends AsyncTask<Void , Void, QueryBeanAndList< AdInfo , Result > >{
+    public class GetHomeAdTask extends AsyncTask<Void, Void, QueryBeanAndList<AdInfo, Result>> {
 
         @Override
         protected void onPreExecute() {
@@ -200,7 +202,7 @@ public class HomeFragement extends Fragment {
 
         @Override
         protected QueryBeanAndList<AdInfo, Result> doInBackground(Void... params) {
-            Map<String,String> map = new HashMap<String , String>();
+            Map<String, String> map = new HashMap<String, String>();
             map.put(Constanse.MESSAGE_NAME, "getHomeVpAd");
             map.put("category", "home_vp_ad");
             try {
@@ -214,26 +216,35 @@ public class HomeFragement extends Fragment {
         @Override
         protected void onPostExecute(QueryBeanAndList<AdInfo, Result> result) {
             super.onPostExecute(result);
-            if( null != result && null != result.bean){
-                if( result.bean.result.equals("100")){
-                    List<AdInfo> adInfoList = result.list;
-                    for( AdInfo adInfo : adInfoList){
+
+            List<AdInfo> adListTest = (List<AdInfo>) result.list;
+            Result r = (Result) result.bean;
+
+            LogUtils.e("json", adListTest.size() + "");
+            LogUtils.e("json", adListTest.get(0).imgUrl);
+
+            LogUtils.e("json", r.message);
+
+            if (null != result && null != r) {
+                if (r.result.equals("100")) {
+                    List<AdInfo> adInfoList = (List<AdInfo>) result.list;
+                    for (AdInfo adInfo : adInfoList) {
                         adList.add(adInfo.imgUrl);
                     }
                     setAdData(adList);
 
-                }else{
-                    t(result.bean.message);
+                } else {
+                    t(r.message);
                 }
 
-            }else{
+            } else {
                 t("接口异常");
             }
         }
     }
 
-    public void t(String str){
-        Toast.makeText(mContext, str , Toast.LENGTH_SHORT).show();
+    public void t(String str) {
+        Toast.makeText(mContext, str, Toast.LENGTH_SHORT).show();
     }
 
     @Override

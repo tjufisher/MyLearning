@@ -12,7 +12,8 @@ public class Constanse {
     public static final String HTTP_SAFETY_SCHEME = "https";
     public static final String HTTP_SCHEME = "http";
 
-    public static final String IP = "127.0.0.1";
+//    public static final String IP = "127.0.0.1";
+    public static final String IP = "192.168.115.230";
     public static final String PORT = "8080";
     public static final String METHOD = "/HTTP/GetDataServlet";
 
