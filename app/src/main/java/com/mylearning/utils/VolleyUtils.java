@@ -16,10 +16,20 @@ import com.mylearning.R;
  */
 public class VolleyUtils {
     private Context mContext;
-    private RequestQueue mQueue;
-    public VolleyUtils(Context context){
+    private static RequestQueue mQueue;
+    private static VolleyUtils volleyUtils;
+
+    private VolleyUtils(Context context){
         mContext = context;
         mQueue = Volley.newRequestQueue(mContext);
+    }
+
+    public static VolleyUtils createInstance( Context context){
+        if ( volleyUtils == null){
+            volleyUtils = new VolleyUtils(context);
+        }
+        mQueue = Volley.newRequestQueue(context);
+        return volleyUtils;
     }
 
     public void doImageRequest(String url, final ImageView imageView, final int default_pic){
@@ -36,6 +46,7 @@ public class VolleyUtils {
                 imageView.setImageResource(default_pic);
             }
         });
+        mQueue.add(imageRequest);
     }
 
 }

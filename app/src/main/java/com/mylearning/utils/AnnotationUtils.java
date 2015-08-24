@@ -41,21 +41,21 @@ public class AnnotationUtils {
         System.out.println("处理Annotation的调用类名称  === "+className);
         Map<String, String> map = new HashMap<String, String>();
         Method[] methods = Class.forName(className).getDeclaredMethods();
-        for (Method method : methods) {
-            if (method.isAnnotationPresent(annotationClasss)) {
-                Annotation p = method.getAnnotation(annotationClasss);
-                Method m = p.getClass()
-                        .getDeclaredMethod(annotationField, null);
-//                String[] values = (String[]) m.invoke(p, null);
-//                for (String key : values) {
-//                    System.out.println("注解值 === " + key);
-//                    map.put(key, key);
-//                }
-                String key = (String)m.invoke(p, null);
-                System.out.println("注解值 === " + key);
-                map.put(key, key);
-            }
-        }
+//        for (Method method : methods) {
+//            if (method.isAnnotationPresent(annotationClasss)) {
+//                Annotation p = method.getAnnotation(annotationClasss);
+//                Method m = p.getClass()
+//                        .getDeclaredMethod(annotationField, null);
+////                String[] values = (String[]) m.invoke(p, null);
+////                for (String key : values) {
+////                    System.out.println("注解值 === " + key);
+////                    map.put(key, key);
+////                }
+//                String key = (String)m.invoke(p, null);
+//                System.out.println("注解值 === " + key);
+//                map.put(key, key);
+//            }
+//        }
         System.out.println("map数量  === " + map.size());
         return map;
     }

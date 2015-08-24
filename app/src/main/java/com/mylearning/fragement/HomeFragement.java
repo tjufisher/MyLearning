@@ -3,6 +3,7 @@ package com.mylearning.fragement;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -12,11 +13,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mylearning.R;
@@ -28,9 +35,12 @@ import com.mylearning.utils.HttpApi;
 import com.mylearning.utils.LogUtils;
 import com.mylearning.utils.StringUtils;
 import com.mylearning.utils.VolleyUtils;
+import com.mylearning.view.WrapContentViewPager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,16 +49,27 @@ import butterknife.InjectView;
 
 
 public class HomeFragement extends Fragment {
-
-
-    @InjectView(R.id.vp_ad)
-    ViewPager vpAd;
     @InjectView(R.id.et)
     EditText et;
+    @InjectView(R.id.vp_ad)
+    WrapContentViewPager vpAd;
+    @InjectView(R.id.ll_imgswitch)
+    LinearLayout llImgswitch;
+
+
     private Context mContext;
     private ArrayList<String> adList;
     private GetHomeAdTask getHomeAdTask;
     private int[] home_ad = {R.drawable.home_ad};
+    private int screenWidth;
+    private ImageView currentImg;// 当前选中的小圆点
+
+
+    private ListView lv;
+    private String[] mStrings = {"a","b","c","d","e","f","g","a","b","c",
+            "d","e","f","g","a","b","c","d","e","f","g"};
+    private ArrayAdapter<String> mAdapter;
+    private LinkedList<String> mListItems;
 
 
     @Override
@@ -61,11 +82,19 @@ public class HomeFragement extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LogUtils.e(getClass().getName(), "create view");
-        mContext = getActivity();
-        View view = inflater.inflate(R.layout.fragement_home, container, false);
+//        View view = inflater.inflate(R.layout.fragement_home, container, false);
+        View view = inflater.inflate(R.layout.fragement_home, null);
         ButterKnife.inject(this, view);
+
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        screenWidth = dm.widthPixels;
+
+        lv = new ListView(mContext);
+        lv.addHeaderView(view);
         initDatas();
-        return view;
+        registerLister();
+
+        return lv;
     }
 
     public void initDatas() {
@@ -78,7 +107,11 @@ public class HomeFragement extends Fragment {
     }
 
     public void registerLister() {
+        mListItems = new LinkedList<String>();
+        mListItems.addAll(Arrays.asList(mStrings));
 
+        MyListAdapter myListAdapter = new MyListAdapter(mListItems);
+        lv.setAdapter(myListAdapter);
 
     }
 
@@ -92,7 +125,7 @@ public class HomeFragement extends Fragment {
             result = new ArrayList<String>();
         }
         if (null != result && result.size() > 0) {
-//            initImgNum(result.size());
+            initImgNum(result.size());
             vpAd.setAdapter(new HomeAdViewPager(result));
             if (result.size() > 1) {
                 vpAd.setOnPageChangeListener(onPageChangeListener);
@@ -101,10 +134,43 @@ public class HomeFragement extends Fragment {
 //                vpAd.setScrollDurationFactor(2);
             }
         } else {
-//            initImgNum(home_ad.length);
+            initImgNum(home_ad.length);
             vpAd.setAdapter(new HomeAdViewPager(null));
         }
     }
+
+    public void initImgNum(int num) {
+        llImgswitch.removeAllViews();
+        if (num == 1) {
+            return;
+        } else {
+            for (int i = 0; i < num; i++) {
+                ImageView img = new ImageView(mContext);
+                img.setImageResource(R.drawable.ad_switcher_btn);
+                if (screenWidth <= 480) {
+                    img.setPadding(10, 0, 0, 0);
+
+                } else {
+                    img.setPadding(25, 0, 0, 0);
+                }
+                llImgswitch.addView(img);
+            }
+            changePosition(0);
+        }
+    }
+
+    public void changePosition(int position) {
+        if (currentImg != null)
+            currentImg.setImageResource(R.drawable.ad_switcher_btn);
+
+        currentImg = (ImageView) llImgswitch.getChildAt(position);
+        if (currentImg == null)
+            return;
+        currentImg.setImageResource(R.drawable.ad_switcher_btn_selected);
+    }
+
+
+
 
     public class HomeAdViewPager extends PagerAdapter {
         private ArrayList<String> adList;
@@ -140,8 +206,8 @@ public class HomeFragement extends Fragment {
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             if (adList != null && adList.size() > 0) {
                 if (!StringUtils.isNullOrEmpty(adList.get(position))) {
-                    VolleyUtils volleyUtils = new VolleyUtils(mContext);
-                    volleyUtils.doImageRequest(adList.get(position), imageView, R.drawable.home_ad);
+                    VolleyUtils.createInstance(mContext).
+                            doImageRequest(adList.get(position), imageView, R.drawable.home_ad);
 
                 }
             } else {
@@ -184,7 +250,7 @@ public class HomeFragement extends Fragment {
 
         @Override
         public void onPageSelected(int position) {
-//            changePosition(position);
+            changePosition(position);
         }
 
         @Override
@@ -192,6 +258,48 @@ public class HomeFragement extends Fragment {
 
         }
     };
+
+
+    public class MyListAdapter extends BaseAdapter{
+        List<String> strList;
+        public MyListAdapter(List list){
+            strList = list;
+        }
+        @Override
+        public int getCount() {
+            return strList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return strList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
+            if(convertView == null){
+                viewHolder = new ViewHolder();
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list_view,null);
+                viewHolder.tv = (TextView)convertView.findViewById(R.id.tv);
+                convertView.setTag(viewHolder);
+            }else{
+                viewHolder = (ViewHolder)convertView.getTag();
+            }
+            viewHolder.tv.setText(strList.get(position));
+
+            return convertView;
+        }
+
+        public class ViewHolder{
+            TextView tv;
+        }
+    }
 
     public class GetHomeAdTask extends AsyncTask<Void, Void, QueryBeanAndList<AdInfo, Result>> {
 
@@ -231,7 +339,7 @@ public class HomeFragement extends Fragment {
                     for (AdInfo adInfo : adInfoList) {
                         adList.add(adInfo.imgUrl);
                     }
-                    setAdData(adList);
+//                    setAdData(adList);
 
                 } else {
                     t(r.message);
@@ -240,6 +348,7 @@ public class HomeFragement extends Fragment {
             } else {
                 t("接口异常");
             }
+            setAdData(adList);
         }
     }
 
