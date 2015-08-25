@@ -41,9 +41,6 @@
             android:layout_height="wrap_content"
             android:hint="输入"
             android:textColor="@color/white"/>
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="500dp"/>
 
     </LinearLayout>
     <HorizontalScrollView

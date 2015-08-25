@@ -3,13 +3,14 @@ package com.mylearning.fragement;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -26,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.mylearning.R;
 import com.mylearning.common.Constanse;
 import com.mylearning.entity.AdInfo;
@@ -43,6 +45,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -63,6 +74,7 @@ public class HomeFragement extends Fragment {
     private int[] home_ad = {R.drawable.home_ad};
     private int screenWidth;
     private ImageView currentImg;// 当前选中的小圆点
+    private Boolean vpRecycle = false;
 
 
     private ListView lv;
@@ -114,6 +126,24 @@ public class HomeFragement extends Fragment {
         lv.setAdapter(myListAdapter);
 
     }
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 1:
+                    int adCount = adList.size();
+                    int currentAd = vpAd.getCurrentItem();
+                    int nextAd = (currentAd + 1) % adCount;
+                    vpAd.setCurrentItem(nextAd);
+                    changePosition(nextAd);
+                    this.sendEmptyMessageDelayed(1,2000);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     /**
      * 设置广告viewpager信息
@@ -203,6 +233,7 @@ public class HomeFragement extends Fragment {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             ImageView imageView = new ImageView(mContext);
+//            NetworkImageView imageView = new NetworkImageView(mContext);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             if (adList != null && adList.size() > 0) {
                 if (!StringUtils.isNullOrEmpty(adList.get(position))) {
@@ -325,22 +356,16 @@ public class HomeFragement extends Fragment {
         protected void onPostExecute(QueryBeanAndList<AdInfo, Result> result) {
             super.onPostExecute(result);
 
-            List<AdInfo> adListTest = (List<AdInfo>) result.list;
-            Result r = (Result) result.bean;
-
-            LogUtils.e("json", adListTest.size() + "");
-            LogUtils.e("json", adListTest.get(0).imgUrl);
-
-            LogUtils.e("json", r.message);
-
-            if (null != result && null != r) {
+            if (null != result && null != result.bean) {
+                Result r = (Result) result.bean;
                 if (r.result.equals("100")) {
-                    List<AdInfo> adInfoList = (List<AdInfo>) result.list;
-                    for (AdInfo adInfo : adInfoList) {
-                        adList.add(adInfo.imgUrl);
-                    }
+                    if( result.list != null && result.list.size() > 0){
+                        List<AdInfo> adInfoList = result.list;
+                        for (AdInfo adInfo : adInfoList) {
+                            adList.add(adInfo.imgUrl);
+                        }
 //                    setAdData(adList);
-
+                    }
                 } else {
                     t(r.message);
                 }
@@ -349,6 +374,12 @@ public class HomeFragement extends Fragment {
                 t("接口异常");
             }
             setAdData(adList);
+
+            if(adList.size() > 1){
+                vpRecycle = true;//广告自动循环开始
+                handler.sendEmptyMessageDelayed(1,2000);
+            }
+
         }
     }
 
@@ -366,5 +397,45 @@ public class HomeFragement extends Fragment {
         super.onDestroyView();
         ButterKnife.reset(this);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(vpRecycle){
+            handler.sendEmptyMessageDelayed(1,2000);
+        }
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        handler.removeMessages(1);
+    }
+
+
+    public void doFuture(){
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        FutureTask<String> futureTask = new FutureTask<String>(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return "done";
+            }
+        });
+
+        String futureResult = null;
+        executorService.execute(futureTask);
+        try {
+            futureResult = futureTask.get(2000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }
