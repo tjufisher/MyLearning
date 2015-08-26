@@ -1,6 +1,6 @@
 package com.mylearning.entity;
 
-public class Content {
+public class HomeListContent {
 	public Integer id;
 	public String title;
 	public double latitude;
@@ -13,5 +13,4 @@ public class Content {
 	public Integer sellNum;
 	public String tag;
 	public String adUrl;
-	public Result result;
 }

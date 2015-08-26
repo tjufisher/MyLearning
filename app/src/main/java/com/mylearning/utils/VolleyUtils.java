@@ -36,7 +36,6 @@ public class VolleyUtils {
         if ( volleyUtils == null){
             volleyUtils = new VolleyUtils(context);
         }
-        mQueue = Volley.newRequestQueue(context);
         return volleyUtils;
     }
 

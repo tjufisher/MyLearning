@@ -49,7 +49,7 @@ import javax.net.ssl.SSLSocketFactory;
  */
 public class HurlStack implements HttpStack {
 
-    private static final String HEADER_CONTENT_TYPE = "Content-Type";
+    private static final String HEADER_CONTENT_TYPE = "HomeListContent-Type";
 
     /**
      * An interface for transforming URLs before use.
@@ -202,7 +202,7 @@ public class HurlStack implements HttpStack {
                 // GET.  Otherwise, it is assumed that the request is a POST.
                 byte[] postBody = request.getPostBody();
                 if (postBody != null) {
-                    // Prepare output. There is no need to set Content-Length explicitly,
+                    // Prepare output. There is no need to set HomeListContent-Length explicitly,
                     // since this is handled by HttpURLConnection using the size of the prepared
                     // output stream.
                     connection.setDoOutput(true);

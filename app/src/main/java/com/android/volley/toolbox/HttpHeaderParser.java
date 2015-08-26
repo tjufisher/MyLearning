@@ -138,7 +138,7 @@ public class HttpHeaderParser {
      *
      * @param headers An {@link java.util.Map} of headers
      * @param defaultCharset Charset to return if none can be found
-     * @return Returns the charset specified in the Content-Type of this header,
+     * @return Returns the charset specified in the HomeListContent-Type of this header,
      * or the defaultCharset if none can be found.
      */
     public static String parseCharset(Map<String, String> headers, String defaultCharset) {
@@ -159,7 +159,7 @@ public class HttpHeaderParser {
     }
 
     /**
-     * Returns the charset specified in the Content-Type of this header,
+     * Returns the charset specified in the HomeListContent-Type of this header,
      * or the HTTP default (ISO-8859-1) if none can be found.
      */
     public static String parseCharset(Map<String, String> headers) {

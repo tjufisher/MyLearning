@@ -50,7 +50,7 @@ import java.util.Map;
 public class HttpClientStack implements HttpStack {
     protected final HttpClient mClient;
 
-    private final static String HEADER_CONTENT_TYPE = "Content-Type";
+    private final static String HEADER_CONTENT_TYPE = "HomeListContent-Type";
 
     public HttpClientStack(HttpClient client) {
         mClient = client;

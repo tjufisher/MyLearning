@@ -27,10 +27,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.mylearning.R;
+import com.mylearning.adapter.HomeListAdapter;
 import com.mylearning.common.Constanse;
 import com.mylearning.entity.AdInfo;
+import com.mylearning.entity.HomeListContent;
 import com.mylearning.entity.QueryBeanAndList;
 import com.mylearning.entity.Result;
 import com.mylearning.utils.HttpApi;
@@ -47,7 +48,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
@@ -77,11 +77,15 @@ public class HomeFragement extends Fragment {
     private Boolean vpRecycle = false;
 
 
+    private GetHomeListTask getHomeListTask;
     private ListView lv;
     private String[] mStrings = {"a","b","c","d","e","f","g","a","b","c",
             "d","e","f","g","a","b","c","d","e","f","g"};
     private ArrayAdapter<String> mAdapter;
     private LinkedList<String> mListItems;
+    private HomeListAdapter homeListAdapter;
+
+    private List<HomeListContent> homeContentList;
 
 
     @Override
@@ -110,20 +114,30 @@ public class HomeFragement extends Fragment {
     }
 
     public void initDatas() {
+        homeContentList = new ArrayList<HomeListContent>();
         adList = new ArrayList<String>();
+        //获取首页ViewPager广告信息
         if (getHomeAdTask != null) {
             getHomeAdTask.cancel(true);
         }
         getHomeAdTask = new GetHomeAdTask();
         getHomeAdTask.execute();
+        //获取首页listview信息
+        if(getHomeListTask != null){
+            getHomeListTask.cancel(true);
+        }
+        getHomeListTask = new GetHomeListTask();
+        getHomeListTask.execute();
     }
 
     public void registerLister() {
-        mListItems = new LinkedList<String>();
-        mListItems.addAll(Arrays.asList(mStrings));
-
-        MyListAdapter myListAdapter = new MyListAdapter(mListItems);
-        lv.setAdapter(myListAdapter);
+//        mListItems = new LinkedList<String>();
+//        mListItems.addAll(Arrays.asList(mStrings));
+//
+//        MyListAdapter myListAdapter = new MyListAdapter(mListItems);
+//        lv.setAdapter(myListAdapter);
+        homeListAdapter = new HomeListAdapter(mContext);
+        lv.setAdapter(homeListAdapter);
 
     }
 
@@ -156,7 +170,7 @@ public class HomeFragement extends Fragment {
         }
         if (null != result && result.size() > 0) {
             initImgNum(result.size());
-            vpAd.setAdapter(new HomeAdViewPager(result));
+            vpAd.setAdapter(new HomeAdViewPagerAdapter(result));
             if (result.size() > 1) {
                 vpAd.setOnPageChangeListener(onPageChangeListener);
 //                vpAd.startAutoScroll(PHOTO_CHANGE_TIME);
@@ -165,7 +179,7 @@ public class HomeFragement extends Fragment {
             }
         } else {
             initImgNum(home_ad.length);
-            vpAd.setAdapter(new HomeAdViewPager(null));
+            vpAd.setAdapter(new HomeAdViewPagerAdapter(null));
         }
     }
 
@@ -202,10 +216,10 @@ public class HomeFragement extends Fragment {
 
 
 
-    public class HomeAdViewPager extends PagerAdapter {
+    public class HomeAdViewPagerAdapter extends PagerAdapter {
         private ArrayList<String> adList;
 
-        public HomeAdViewPager(ArrayList<String> adList) {
+        public HomeAdViewPagerAdapter(ArrayList<String> adList) {
             this.adList = adList;
         }
 
@@ -380,6 +394,50 @@ public class HomeFragement extends Fragment {
                 handler.sendEmptyMessageDelayed(1,2000);
             }
 
+        }
+    }
+
+    public class GetHomeListTask extends AsyncTask<Void, Void, QueryBeanAndList<HomeListContent, Result > >{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected QueryBeanAndList<HomeListContent, Result> doInBackground(Void... params) {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put(Constanse.MESSAGE_NAME, "getHomeList");
+            map.put("rows", "5");
+            map.put("times", "0");
+            try {
+                return HttpApi.getQuery(map, HomeListContent.class, Result.class);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(QueryBeanAndList<HomeListContent, Result> result) {
+            super.onPostExecute(result);
+            if (null != result && null != result.bean) {
+                Result r = (Result) result.bean;
+                if (r.result.equals("100")) {
+                    if( result.list != null && result.list.size() > 0){
+                        List<HomeListContent> contentList = result.list;
+//                        for (HomeListContent content : contentList) {
+//                            homeContentList.addAll(contentList);
+//                        }
+                        homeContentList.addAll(contentList);
+
+                    }
+                } else {
+                    t(r.message);
+                }
+                homeListAdapter.update(homeContentList);
+            } else {
+                t("接口异常");
+            }
         }
     }
 
