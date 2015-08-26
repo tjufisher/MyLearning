@@ -16,12 +16,13 @@ import java.util.Map;
  * Created by user on 2015/8/20.
  */
 public class WebUtils {
-    private static String url = Constanse.HTTP_URL;
+    private static String url = Constanse.getURL();
     private static HttpURLConnection connection = null;
 
     public static String doPost(Map<String, String> map){
         try {
             URL u = new URL(url);
+            LogUtils.e("url",url);
             connection = (HttpURLConnection) u.openConnection();
             connection.setDoOutput(true);
             connection.setRequestMethod(Constanse.REQUEST_METHOD);
@@ -50,6 +51,9 @@ public class WebUtils {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }
+        if(Constanse.IS_HOME){
+            strResponse = strResponse.replace(Constanse.IP, Constanse.IP_HOME);
         }
         return strResponse;
     }

@@ -51,9 +51,10 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <Button
+                android:id="@+id/btn_refresh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="button1"/>
+                android:text="refresh"/>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

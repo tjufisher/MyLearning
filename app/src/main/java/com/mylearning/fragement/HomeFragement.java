@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,7 +42,6 @@ import com.mylearning.utils.VolleyUtils;
 import com.mylearning.view.WrapContentViewPager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,9 +54,9 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 
 public class HomeFragement extends Fragment {
@@ -66,6 +66,8 @@ public class HomeFragement extends Fragment {
     WrapContentViewPager vpAd;
     @InjectView(R.id.ll_imgswitch)
     LinearLayout llImgswitch;
+    @InjectView(R.id.btn_refresh)
+    Button btnRefresh;
 
 
     private Context mContext;
@@ -79,8 +81,8 @@ public class HomeFragement extends Fragment {
 
     private GetHomeListTask getHomeListTask;
     private ListView lv;
-    private String[] mStrings = {"a","b","c","d","e","f","g","a","b","c",
-            "d","e","f","g","a","b","c","d","e","f","g"};
+    private String[] mStrings = {"a", "b", "c", "d", "e", "f", "g", "a", "b", "c",
+            "d", "e", "f", "g", "a", "b", "c", "d", "e", "f", "g"};
     private ArrayAdapter<String> mAdapter;
     private LinkedList<String> mListItems;
     private HomeListAdapter homeListAdapter;
@@ -92,6 +94,7 @@ public class HomeFragement extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
+        Constanse.IS_HOME = true;
     }
 
     @Nullable
@@ -123,7 +126,7 @@ public class HomeFragement extends Fragment {
         getHomeAdTask = new GetHomeAdTask();
         getHomeAdTask.execute();
         //获取首页listview信息
-        if(getHomeListTask != null){
+        if (getHomeListTask != null) {
             getHomeListTask.cancel(true);
         }
         getHomeListTask = new GetHomeListTask();
@@ -141,17 +144,17 @@ public class HomeFragement extends Fragment {
 
     }
 
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
                     int adCount = adList.size();
                     int currentAd = vpAd.getCurrentItem();
                     int nextAd = (currentAd + 1) % adCount;
                     vpAd.setCurrentItem(nextAd);
                     changePosition(nextAd);
-                    this.sendEmptyMessageDelayed(1,2000);
+                    this.sendEmptyMessageDelayed(1, 2000);
                     break;
                 default:
                     break;
@@ -212,8 +215,6 @@ public class HomeFragement extends Fragment {
             return;
         currentImg.setImageResource(R.drawable.ad_switcher_btn_selected);
     }
-
-
 
 
     public class HomeAdViewPagerAdapter extends PagerAdapter {
@@ -305,11 +306,13 @@ public class HomeFragement extends Fragment {
     };
 
 
-    public class MyListAdapter extends BaseAdapter{
+    public class MyListAdapter extends BaseAdapter {
         List<String> strList;
-        public MyListAdapter(List list){
+
+        public MyListAdapter(List list) {
             strList = list;
         }
+
         @Override
         public int getCount() {
             return strList.size();
@@ -328,20 +331,20 @@ public class HomeFragement extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
-            if(convertView == null){
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list_view,null);
-                viewHolder.tv = (TextView)convertView.findViewById(R.id.tv);
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list_view, null);
+                viewHolder.tv = (TextView) convertView.findViewById(R.id.tv);
                 convertView.setTag(viewHolder);
-            }else{
-                viewHolder = (ViewHolder)convertView.getTag();
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
             }
             viewHolder.tv.setText(strList.get(position));
 
             return convertView;
         }
 
-        public class ViewHolder{
+        public class ViewHolder {
             TextView tv;
         }
     }
@@ -373,7 +376,7 @@ public class HomeFragement extends Fragment {
             if (null != result && null != result.bean) {
                 Result r = (Result) result.bean;
                 if (r.result.equals("100")) {
-                    if( result.list != null && result.list.size() > 0){
+                    if (result.list != null && result.list.size() > 0) {
                         List<AdInfo> adInfoList = result.list;
                         for (AdInfo adInfo : adInfoList) {
                             adList.add(adInfo.imgUrl);
@@ -389,15 +392,15 @@ public class HomeFragement extends Fragment {
             }
             setAdData(adList);
 
-            if(adList.size() > 1){
+            if (adList.size() > 1) {
                 vpRecycle = true;//广告自动循环开始
-                handler.sendEmptyMessageDelayed(1,2000);
+                handler.sendEmptyMessageDelayed(1, 2000);
             }
 
         }
     }
 
-    public class GetHomeListTask extends AsyncTask<Void, Void, QueryBeanAndList<HomeListContent, Result > >{
+    public class GetHomeListTask extends AsyncTask<Void, Void, QueryBeanAndList<HomeListContent, Result>> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -423,7 +426,7 @@ public class HomeFragement extends Fragment {
             if (null != result && null != result.bean) {
                 Result r = (Result) result.bean;
                 if (r.result.equals("100")) {
-                    if( result.list != null && result.list.size() > 0){
+                    if (result.list != null && result.list.size() > 0) {
                         List<HomeListContent> contentList = result.list;
 //                        for (HomeListContent content : contentList) {
 //                            homeContentList.addAll(contentList);
@@ -459,8 +462,8 @@ public class HomeFragement extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(vpRecycle){
-            handler.sendEmptyMessageDelayed(1,2000);
+        if (vpRecycle) {
+            handler.sendEmptyMessageDelayed(1, 2000);
         }
 
     }
@@ -472,7 +475,7 @@ public class HomeFragement extends Fragment {
     }
 
 
-    public void doFuture(){
+    public void doFuture() {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         FutureTask<String> futureTask = new FutureTask<String>(new Callable<String>() {
             @Override
@@ -494,6 +497,9 @@ public class HomeFragement extends Fragment {
         }
     }
 
-
+    @OnClick(R.id.btn_refresh)
+    public void refresh(){
+        initDatas();
+    }
 
 }
