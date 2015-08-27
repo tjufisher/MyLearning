@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import com.mylearning.R;
 import com.mylearning.adapter.HomeListAdapter;
-import com.mylearning.common.Constanse;
+import com.mylearning.common.Constants;
 import com.mylearning.entity.AdInfo;
 import com.mylearning.entity.HomeListContent;
 import com.mylearning.entity.QueryBeanAndList;
@@ -46,13 +46,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -94,7 +87,7 @@ public class HomeFragement extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
-        Constanse.IS_HOME = true;
+        Constants.IS_HOME = false;
     }
 
     @Nullable
@@ -115,6 +108,8 @@ public class HomeFragement extends Fragment {
 
         return lv;
     }
+
+
 
     public void initDatas() {
         homeContentList = new ArrayList<HomeListContent>();
@@ -359,7 +354,7 @@ public class HomeFragement extends Fragment {
         @Override
         protected QueryBeanAndList<AdInfo, Result> doInBackground(Void... params) {
             Map<String, String> map = new HashMap<String, String>();
-            map.put(Constanse.MESSAGE_NAME, "getHomeVpAd");
+            map.put(Constants.MESSAGE_NAME, "getHomeVpAd");
             map.put("category", "home_vp_ad");
             try {
                 return HttpApi.getQuery(map, AdInfo.class, Result.class);
@@ -409,7 +404,7 @@ public class HomeFragement extends Fragment {
         @Override
         protected QueryBeanAndList<HomeListContent, Result> doInBackground(Void... params) {
             Map<String, String> map = new HashMap<String, String>();
-            map.put(Constanse.MESSAGE_NAME, "getHomeList");
+            map.put(Constants.MESSAGE_NAME, "getHomeList");
             map.put("rows", "5");
             map.put("times", "0");
             try {
@@ -475,31 +470,11 @@ public class HomeFragement extends Fragment {
     }
 
 
-    public void doFuture() {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        FutureTask<String> futureTask = new FutureTask<String>(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                return "done";
-            }
-        });
 
-        String futureResult = null;
-        executorService.execute(futureTask);
-        try {
-            futureResult = futureTask.get(2000, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-        }
-    }
 
     @OnClick(R.id.btn_refresh)
     public void refresh(){
-        initDatas();
+
     }
 
 }

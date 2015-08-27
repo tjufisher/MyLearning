@@ -1,6 +1,6 @@
 package com.mylearning.utils;
 
-import com.mylearning.common.Constanse;
+import com.mylearning.common.Constants;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.util.Map;
  * Created by user on 2015/8/20.
  */
 public class WebUtils {
-    private static String url = Constanse.getURL();
+    private static String url = Constants.getURL();
     private static HttpURLConnection connection = null;
 
     public static String doPost(Map<String, String> map){
@@ -25,9 +25,9 @@ public class WebUtils {
             LogUtils.e("url",url);
             connection = (HttpURLConnection) u.openConnection();
             connection.setDoOutput(true);
-            connection.setRequestMethod(Constanse.REQUEST_METHOD);
+            connection.setRequestMethod(Constants.REQUEST_METHOD);
             OutputStream outputStream = connection.getOutputStream();
-            OutputStreamWriter out = new OutputStreamWriter(outputStream, Constanse.ENCODING);
+            OutputStreamWriter out = new OutputStreamWriter(outputStream, Constants.ENCODING);
             out.write(buildParameters(map));
             out.flush();
             out.close();
@@ -52,8 +52,8 @@ public class WebUtils {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        if(Constanse.IS_HOME){
-            strResponse = strResponse.replace(Constanse.IP, Constanse.IP_HOME);
+        if(Constants.IS_HOME){
+            strResponse = strResponse.replace(Constants.IP, Constants.IP_HOME);
         }
         return strResponse;
     }

@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mylearning.R;
-import com.mylearning.common.Constanse;
+import com.mylearning.common.Constants;
 import com.mylearning.utils.LogUtils;
 
 import butterknife.ButterKnife;
@@ -118,11 +118,11 @@ public class MyFragement extends Fragment {
 
     @OnClick(R.id.personal_mine_update)
     public void change(){
-        if(Constanse.IS_HOME){
-            Constanse.IS_HOME = false;
+        if(Constants.IS_HOME){
+            Constants.IS_HOME = false;
             Toast.makeText(mContext, "work interface", Toast.LENGTH_SHORT).show();
         }else{
-            Constanse.IS_HOME = true;
+            Constants.IS_HOME = true;
             Toast.makeText(mContext, "home interface", Toast.LENGTH_SHORT).show();
         }
 
