@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.mylearning.R;
 import com.mylearning.base.BaseActivity;
 import com.mylearning.fragement.HomeFragement;
@@ -35,6 +36,11 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //在使用SDK各组件之前初始化context信息，传入ApplicationContext
+        //注意该方法要再setContentView方法之前实现
+        SDKInitializer.initialize(getApplicationContext());
+
+
         setContentView(R.layout.activity_main, LAYOUT_TYPE_HEADER);
         ButterKnife.inject(this);
         setHeaderBar("欢迎页面", R.drawable.share);
