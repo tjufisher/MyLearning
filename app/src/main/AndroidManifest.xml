@@ -37,9 +37,12 @@
             </intent-filter>
         </service>
 
+        <!--<meta-data-->
+            <!--android:name="com.baidu.lbsapi.API_KEY"-->
+            <!--android:value="5yz5Iy1MMOL2onxZGT9NAFAR" />-->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="5yz5Iy1MMOL2onxZGT9NAFAR" />
+            android:value="Lt7UZtKLzmH5mw1owmy4KdX1" />
 
         <activity
             android:name=".activity.SplashActivity"

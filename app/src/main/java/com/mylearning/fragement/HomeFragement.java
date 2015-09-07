@@ -87,7 +87,7 @@ public class HomeFragement extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
-        Constants.IS_HOME = false;
+        Constants.IS_HOME = true;
     }
 
     @Nullable

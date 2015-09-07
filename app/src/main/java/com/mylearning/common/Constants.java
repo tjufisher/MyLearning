@@ -18,7 +18,7 @@ public class Constants {
 
 //    public static final String IP = "127.0.0.1";
     public static final String IP = "192.168.115.230";
-    public static final String IP_HOME = "192.168.1.108";
+    public static final String IP_HOME = "192.168.1.104";
 
     public static final String PORT = "8080";
     public static final String METHOD = "/HTTP/GetDataServlet";

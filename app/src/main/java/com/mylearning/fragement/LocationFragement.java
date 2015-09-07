@@ -26,16 +26,7 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.mylearning.R;
 import com.mylearning.utils.LogUtils;
-import com.mylearning.utils.Utils;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -63,7 +54,7 @@ public class LocationFragement extends Fragment {
 
 
     private LocationClientOption.LocationMode tempMode = LocationClientOption.LocationMode.Hight_Accuracy;
-    private String tempcoor = "gcj02";
+    private String tempcoor = "bd09ll";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -138,14 +129,12 @@ public class LocationFragement extends Fragment {
                     .longitude(location.getLongitude()).build();
             baiduMap.setMyLocationData(locData);
 
-            if (isFirstLoc) {
+            if (isFirstLoc && location.getLocType()==161) {
                 isFirstLoc = false;
                 LatLng ll = new LatLng(location.getLatitude(),
                         location.getLongitude());
                 MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
                 baiduMap.animateMapStatus(u);
-
-
             }
 
 
