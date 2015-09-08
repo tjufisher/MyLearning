@@ -54,6 +54,16 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
 
     }
 
+    public void changeFragement(int index){
+        for (int i = 0; i < radioButtons.length; i++) {
+//            radioButtons[i].setSelected( i == index);
+
+                radioButtons[i].setChecked(i == index);
+
+        }
+
+    }
+
     public void initDatas(){
         tabs = new Fragment[4];
         tabs[0] = new HomeFragement();
@@ -86,6 +96,7 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
                        lastTabIndex = i;
                        radioButtons[i].setSelected(true);
                        Fragment f = getFragmentManager().findFragmentByTag(TAG_CURRENT_FRAGMENT + i);
+
                        if( null == f){
                            ft.add(flContainer.getId(), tabs[i], TAG_CURRENT_FRAGMENT + i);
                        }else{

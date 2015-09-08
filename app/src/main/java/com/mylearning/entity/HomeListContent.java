@@ -1,6 +1,8 @@
 package com.mylearning.entity;
 
-public class HomeListContent {
+import java.io.Serializable;
+
+public class HomeListContent implements Serializable {
 	public Integer id;
 	public String title;
 	public double latitude;

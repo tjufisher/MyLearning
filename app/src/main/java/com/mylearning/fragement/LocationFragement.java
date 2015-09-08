@@ -1,43 +1,34 @@
 package com.mylearning.fragement;
 
 import android.app.Fragment;
-import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.baidu.location.Poi;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.mylearning.R;
-import com.mylearning.common.App;
-import com.mylearning.utils.LocationUtils;
+import com.mylearning.entity.HomeListContent;
 import com.mylearning.utils.LogUtils;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 
 public class LocationFragement extends Fragment {
@@ -52,6 +43,7 @@ public class LocationFragement extends Fragment {
 
     BitmapDescriptor mCurrentMarker;
     boolean isFirstLoc = true;// 是否首次定位
+    private List<HomeListContent> homeContentList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,30 +64,54 @@ public class LocationFragement extends Fragment {
 
         baiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(16.0f));
 
-        BDLocation mLocation = App.getSelf().getmLocationUtils().getmLocation();
-
-        LatLng ll = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-
-        MyLocationData locData = new MyLocationData.Builder()
-                    .accuracy(mLocation.getRadius())
-                            // 此处设置开发者获取到的方向信息，顺时针0-360
-                    .direction(100).latitude(mLocation.getLatitude())
-                    .longitude(mLocation.getLongitude()).build();
-        baiduMap.setMyLocationData(locData);
-
-        MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
-        baiduMap.animateMapStatus(u);
-
-        View view1 = LayoutInflater.from(mContext).inflate(R.layout.notify, null);
-        Bitmap bitmap1 = getBitmapFromView(view1);
-
-        BitmapDescriptor bitmap = BitmapDescriptorFactory
-                .fromResource(R.drawable.lml);
-
-        OverlayOptions options = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromBitmap(bitmap1));
-        baiduMap.addOverlay(options);
+//        BDLocation mLocation = App.getSelf().getmLocationUtils().getmLocation();
+//
+//        LatLng ll = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+//
+//        MyLocationData locData = new MyLocationData.Builder()
+//                    .accuracy(mLocation.getRadius())
+//                            // 此处设置开发者获取到的方向信息，顺时针0-360
+//                    .direction(100).latitude(mLocation.getLatitude())
+//                    .longitude(mLocation.getLongitude()).build();
+//        baiduMap.setMyLocationData(locData);
+//
+//        MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
+//        baiduMap.animateMapStatus(u);
+//
+//        getIntent();
+//        addPoints();
 
         return view;
+    }
+
+    public void getIntent(){
+        if( getActivity().getIntent() != null)
+            homeContentList = (List<HomeListContent>)getActivity().getIntent()
+                    .getSerializableExtra("data");
+    }
+
+    public void addPoints(){
+        if( homeContentList != null && homeContentList.size() > 0){
+            for( int i = 0; i < homeContentList.size(); i++){
+                LatLng ll = new LatLng(homeContentList.get(i).latitude, homeContentList.get(i).longitude);
+                drawPoint(ll, i);
+            }
+        }
+
+    }
+
+    public void drawPoint( LatLng latLng, int index){
+        View viewPoint = LayoutInflater.from(mContext).inflate(R.layout.map_marker, null);
+        TextView tv_num = (TextView)viewPoint.findViewById(R.id.tv_num);
+        tv_num.setText(String.valueOf(index));
+        Bitmap viewBitmap = getBitmapFromView(viewPoint);
+
+        BitmapDescriptor bitmap = BitmapDescriptorFactory
+                .fromBitmap(viewBitmap);
+
+        OverlayOptions options = new MarkerOptions().position(latLng).icon(bitmap);
+        baiduMap.addOverlay(options);
+
     }
 
     public Bitmap getBitmapFromView(View view) {
@@ -107,6 +123,12 @@ public class LocationFragement extends Fragment {
         view.setDrawingCacheEnabled(true);
         Bitmap bitmap = view.getDrawingCache(true);
         return bitmap;
+    }
+
+    public class MyOverlay extends Overlay{
+
+
+
     }
 
     @Override

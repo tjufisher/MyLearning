@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -29,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mylearning.R;
+import com.mylearning.activity.MainActivity;
 import com.mylearning.adapter.HomeListAdapter;
 import com.mylearning.common.Constants;
 import com.mylearning.entity.AdInfo;
@@ -54,16 +54,17 @@ import butterknife.OnClick;
 
 
 public class HomeFragement extends Fragment {
-//    @InjectView(R.id.et)
+    //    @InjectView(R.id.et)
 //    EditText et;
-    @InjectView(R.id.vp_ad)
-    WrapContentViewPager vpAd;
+
     @InjectView(R.id.ll_imgswitch)
     LinearLayout llImgswitch;
-    @InjectView(R.id.btn_refresh)
-    Button btnRefresh;
     @InjectView(R.id.et)
     JustifyEditView et;
+    @InjectView(R.id.vp_ad)
+    WrapContentViewPager vpAd;
+    @InjectView(R.id.btn)
+    Button btn;
 
 
     private Context mContext;
@@ -470,9 +471,15 @@ public class HomeFragement extends Fragment {
     }
 
 
-    @OnClick(R.id.btn_refresh)
-    public void refresh() {
+    @OnClick(R.id.btn)
+    public void mapShow() {
+        if( homeContentList != null && homeContentList.size() > 0){
+//            Intent intent = new Intent(mContext, LocationFragement.class);
+//            intent.putExtra("data", (Serializable) homeContentList);
+//            startActivity(intent);
+            ((MainActivity)getActivity()).changeFragement(1);
 
+        }
     }
 
 }
