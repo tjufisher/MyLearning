@@ -39,6 +39,7 @@ import com.mylearning.utils.HttpApi;
 import com.mylearning.utils.LogUtils;
 import com.mylearning.utils.StringUtils;
 import com.mylearning.utils.VolleyUtils;
+import com.mylearning.view.JustifyEditView;
 import com.mylearning.view.WrapContentViewPager;
 
 import java.util.ArrayList;
@@ -53,14 +54,16 @@ import butterknife.OnClick;
 
 
 public class HomeFragement extends Fragment {
-    @InjectView(R.id.et)
-    EditText et;
+//    @InjectView(R.id.et)
+//    EditText et;
     @InjectView(R.id.vp_ad)
     WrapContentViewPager vpAd;
     @InjectView(R.id.ll_imgswitch)
     LinearLayout llImgswitch;
     @InjectView(R.id.btn_refresh)
     Button btnRefresh;
+    @InjectView(R.id.et)
+    JustifyEditView et;
 
 
     private Context mContext;
@@ -87,14 +90,12 @@ public class HomeFragement extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
-        Constants.IS_HOME = true;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LogUtils.e(getClass().getName(), "create view");
-//        View view = inflater.inflate(R.layout.fragement_home, container, false);
         View view = inflater.inflate(R.layout.fragement_home, null);
         ButterKnife.inject(this, view);
 
@@ -108,7 +109,6 @@ public class HomeFragement extends Fragment {
 
         return lv;
     }
-
 
 
     public void initDatas() {
@@ -470,10 +470,8 @@ public class HomeFragement extends Fragment {
     }
 
 
-
-
     @OnClick(R.id.btn_refresh)
-    public void refresh(){
+    public void refresh() {
 
     }
 

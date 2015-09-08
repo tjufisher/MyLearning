@@ -7,6 +7,8 @@ import android.os.Handler;
 
 import com.mylearning.R;
 import com.mylearning.base.BaseActivity;
+import com.mylearning.common.App;
+import com.mylearning.common.Constants;
 
 /**
  * 〈一句话功能简述〉
@@ -22,8 +24,13 @@ public class SplashActivity extends BaseActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Constants.IS_HOME = false;
         mContext = this;
         setContentView(R.layout.activity_welcome);
+
+        App.getSelf().init();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

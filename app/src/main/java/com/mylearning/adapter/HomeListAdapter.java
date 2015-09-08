@@ -11,11 +11,17 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.mylearning.R;
+import com.mylearning.common.App;
 import com.mylearning.entity.HomeListContent;
+import com.mylearning.utils.LogUtils;
 import com.mylearning.utils.StringUtils;
 import com.mylearning.utils.VolleyUtils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +101,15 @@ public class HomeListAdapter extends BaseAdapter {
 
         viewHolder.tvSellPrice.setText("￥" + content.sellPrice);
 //        距离计算
-//        viewHolder.tvDistance.setText("");
+        BDLocation mLocation = App.getSelf().getmLocationUtils().getmLocation();
+        LatLng latLngCurrent = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+        LatLng latLngObject = new LatLng(content.latitude, content.longitude);
+        LogUtils.e("latitude",""+content.latitude);
+        LogUtils.e("longitude",""+content.longitude);
+        Double ditance = DistanceUtil.getDistance(latLngCurrent, latLngObject);
+        DecimalFormat df = new DecimalFormat("#0.00");
+        viewHolder.tvDistance.setText(df.format(ditance / 1000) + "KM");
+
         String strs = content.tag;
         String[] strArr = strs.split(" ");
 //        StringUtils.setViewGone(viewHolder.tvTag1, viewHolder.tvTag2,viewHolder.tvTag3);

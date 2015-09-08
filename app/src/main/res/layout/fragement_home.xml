@@ -36,7 +36,7 @@
         android:orientation="vertical"
         android:background="#888888"
         android:visibility="gone">
-        <EditText
+        <com.mylearning.view.JustifyEditView
             android:id="@+id/et"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
