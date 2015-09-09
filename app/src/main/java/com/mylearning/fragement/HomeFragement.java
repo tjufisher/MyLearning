@@ -1,6 +1,7 @@
 package com.mylearning.fragement;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -85,6 +86,7 @@ public class HomeFragement extends Fragment {
     private HomeListAdapter homeListAdapter;
 
     private List<HomeListContent> homeContentList;
+    private ShowInMap mCallback;
 
 
     @Override
@@ -470,14 +472,27 @@ public class HomeFragement extends Fragment {
         handler.removeMessages(1);
     }
 
+    public interface ShowInMap{
+        public <T> void showPoints(List<T> list);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try{
+            mCallback = (ShowInMap)activity;
+        }catch (ClassCastException e){
+            throw new ClassCastException(activity.toString()
+                    + " must implement ShowInMap interface");
+        }
+
+    }
 
     @OnClick(R.id.btn)
     public void mapShow() {
         if( homeContentList != null && homeContentList.size() > 0){
-//            Intent intent = new Intent(mContext, LocationFragement.class);
-//            intent.putExtra("data", (Serializable) homeContentList);
-//            startActivity(intent);
-            ((MainActivity)getActivity()).changeFragement(1);
+//            ((MainActivity)getActivity()).changeFragement(1);
+            mCallback.showPoints(homeContentList);
 
         }
     }
