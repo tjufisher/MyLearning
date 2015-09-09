@@ -11,7 +11,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.baidu.mapapi.SDKInitializer;
 import com.mylearning.R;
 import com.mylearning.base.BaseActivity;
 import com.mylearning.fragement.HomeFragement;
@@ -134,6 +133,7 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
 
     @Override
     public <T> void showPoints(List<T> list) {
+        lastTabIndex = 1;
         radioButtons[0].setSelected(false);
         radioButtons[1].setSelected(true);
         FragmentTransaction ft =  getFragmentManager().beginTransaction();

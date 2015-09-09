@@ -15,6 +15,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +29,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.mylearning.R;
-import com.mylearning.activity.MainActivity;
 import com.mylearning.adapter.HomeListAdapter;
 import com.mylearning.common.Constants;
 import com.mylearning.entity.AdInfo;
@@ -44,6 +46,7 @@ import com.mylearning.view.JustifyEditView;
 import com.mylearning.view.WrapContentViewPager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -76,8 +79,12 @@ public class HomeFragement extends Fragment {
     private ImageView currentImg;// 当前选中的小圆点
     private Boolean vpRecycle = false;
 
+    private int rows = 5;//请求接口返回的行数
+    private int times = 0;//请求接口的次数
+
 
     private GetHomeListTask getHomeListTask;
+    private PullToRefreshListView mPullRefreshListView;
     private ListView lv;
     private String[] mStrings = {"a", "b", "c", "d", "e", "f", "g", "a", "b", "c",
             "d", "e", "f", "g", "a", "b", "c", "d", "e", "f", "g"};
@@ -104,13 +111,37 @@ public class HomeFragement extends Fragment {
 
         DisplayMetrics dm = getResources().getDisplayMetrics();
         screenWidth = dm.widthPixels;
+        times = 0;// 每次重新加载是初始画请求次数
 
-        lv = new ListView(mContext);
+
+        mPullRefreshListView = new PullToRefreshListView(mContext);
+        mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                String label = DateUtils.formatDateTime(mContext, System.currentTimeMillis(),
+                        DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+
+                // Update the LastUpdatedLabel
+                refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+
+                // Do work to refresh the list here.
+                times ++;
+                if (getHomeListTask != null) {
+                    getHomeListTask.cancel(true);
+                }
+                getHomeListTask = new GetHomeListTask();
+                getHomeListTask.execute();
+
+            }
+        });
+        lv = mPullRefreshListView.getRefreshableView();
+//        lv = new ListView(mContext);
         lv.addHeaderView(view);
+
         initDatas();
         registerLister();
 
-        return lv;
+        return mPullRefreshListView;
     }
 
 
@@ -408,8 +439,8 @@ public class HomeFragement extends Fragment {
         protected QueryBeanAndList<HomeListContent, Result> doInBackground(Void... params) {
             Map<String, String> map = new HashMap<String, String>();
             map.put(Constants.MESSAGE_NAME, "getHomeList");
-            map.put("rows", "5");
-            map.put("times", "0");
+            map.put("rows", rows + "");
+            map.put("times", times + "");
             try {
                 return HttpApi.getQuery(map, HomeListContent.class, Result.class);
             } catch (Exception e) {
@@ -423,19 +454,32 @@ public class HomeFragement extends Fragment {
             super.onPostExecute(result);
             if (null != result && null != result.bean) {
                 Result r = (Result) result.bean;
-                if (r.result.equals("100")) {
-                    if (result.list != null && result.list.size() > 0) {
-                        List<HomeListContent> contentList = result.list;
+                if( r.result != null && r.message != null){
+                    if ( r.result.equals("100")) {
+                        if (result.list != null && result.list.size() > 0) {
+                            List<HomeListContent> contentList = result.list;
 //                        for (HomeListContent content : contentList) {
 //                            homeContentList.addAll(contentList);
 //                        }
-                        homeContentList.addAll(contentList);
+//                        三次逆序，实现讲后获取到的数据放置在原有数据前面
+                            Collections.reverse(homeContentList);
+                            Collections.reverse(contentList);
+                            homeContentList.addAll(contentList);
+                            Collections.reverse(homeContentList);
 
+                        }
+                    } else {
+                        t(r.message);
                     }
-                } else {
-                    t(r.message);
+                }else{
+                    t("没有新的数据了");
                 }
+
                 homeListAdapter.update(homeContentList);
+                if( times != 0){
+                    mPullRefreshListView.onRefreshComplete();
+                }
+
             } else {
                 t("接口异常");
             }

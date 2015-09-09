@@ -38,12 +38,14 @@
             </intent-filter>
         </service>
 
-        <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="5yz5Iy1MMOL2onxZGT9NAFAR" />
+        <!-- 单位百度地图key-->
         <!--<meta-data-->
             <!--android:name="com.baidu.lbsapi.API_KEY"-->
-            <!--android:value="Lt7UZtKLzmH5mw1owmy4KdX1" />-->
+            <!--android:value="5yz5Iy1MMOL2onxZGT9NAFAR" />-->
+        <!-- 家百度地图key-->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="Lt7UZtKLzmH5mw1owmy4KdX1" />
 
         <activity
             android:name=".activity.SplashActivity"

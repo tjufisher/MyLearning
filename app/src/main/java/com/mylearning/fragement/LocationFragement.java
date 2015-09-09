@@ -1,6 +1,5 @@
 package com.mylearning.fragement;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
-import com.baidu.location.LocationClient;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -24,7 +23,6 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.mylearning.R;
@@ -78,7 +76,8 @@ public class LocationFragement extends BaseFragement {
         baiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(16.0f));
 
         BDLocation mLocation = App.getSelf().getmLocationUtils().getmLocation();
-        if (mLocation != null && mLocation.getLatitude() != 0 && mLocation.getLongitude() != 0) {
+        if (mLocation != null && mLocation.getLatitude() != 4.9E-324
+                && mLocation.getLongitude() != 4.9E-324) {
             LatLng ll = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
 
             MyLocationData locData = new MyLocationData.Builder()
@@ -90,6 +89,8 @@ public class LocationFragement extends BaseFragement {
 
             MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);//设置当前位置
             baiduMap.animateMapStatus(u);
+        }else{
+            Toast.makeText(mContext,"定位失败！",Toast.LENGTH_SHORT);
         }
     }
 
@@ -136,11 +137,19 @@ public class LocationFragement extends BaseFragement {
     }
 
     public void addPoints() {
+        double lat = 0, lng = 0;
         if (homeContentList != null && homeContentList.size() > 0) {
             for (int i = 0; i < homeContentList.size(); i++) {
+                lat += homeContentList.get(i).latitude;
+                lng += homeContentList.get(i).longitude;
                 LatLng ll = new LatLng(homeContentList.get(i).latitude, homeContentList.get(i).longitude);
                 drawPoint(ll, i);
             }
+            lat = lat / homeContentList.size();
+            lng = lng / homeContentList.size();
+            LatLng latLngCenter = new LatLng(lat, lng);
+            MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLngCenter);//设置中心位置
+            baiduMap.animateMapStatus(u);
         }
     }
 

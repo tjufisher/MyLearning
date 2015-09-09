@@ -25,7 +25,7 @@ public class SplashActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Constants.IS_HOME = false;
+        Constants.IS_HOME = true;
         mContext = this;
         setContentView(R.layout.activity_welcome);
 
