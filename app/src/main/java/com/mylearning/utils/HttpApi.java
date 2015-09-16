@@ -5,13 +5,9 @@ import com.google.jtm.JsonArray;
 import com.google.jtm.JsonElement;
 import com.google.jtm.JsonObject;
 import com.google.jtm.JsonParser;
-import com.google.jtm.reflect.TypeToken;
-import com.mylearning.entity.AdInfo;
 import com.mylearning.entity.QueryBeanAndList;
-import com.mylearning.entity.Result;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +17,7 @@ import java.util.Map;
 public class HttpApi {
     public static<T, O> QueryBeanAndList<T,O> getQuery(Map<String, String> map, Class<T> listClazz,
                                                        Class<O> beanClazz){
-        String strResponse = WebUtils.doPost(map);
+        String strResponse = WebUtils.doGet(map);
         Gson gson = new Gson();
 
         QueryBeanAndList<T,O> result = new  QueryBeanAndList<T,O>();
@@ -47,6 +43,9 @@ public class HttpApi {
         object = new Gson().fromJson(jsonObjectBean, beanClazz);
 
         result.bean = object;
+//   Java there is type-erasure. This means that at runtime
+// all instances of T are replaced with Object.
+// Therefore at runtime what you are passing GSON is really MyJson<Object>
 
 //        java.lang.reflect.Type type = new TypeToken<QueryBeanAndList<T,O>>() {}.getType();
 //        result = gson.fromJson(strResponse, type);

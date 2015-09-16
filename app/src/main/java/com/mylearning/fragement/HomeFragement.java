@@ -100,6 +100,7 @@ public class HomeFragement extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
+
     }
 
     @Nullable
@@ -110,6 +111,13 @@ public class HomeFragement extends Fragment {
         ButterKnife.inject(this, view);
 
         DisplayMetrics dm = getResources().getDisplayMetrics();
+        LogUtils.e("screen info:", dm.widthPixels+"");
+        LogUtils.e("screen info:", dm.heightPixels+"");
+        LogUtils.e("screen info:", dm.density+"");
+        LogUtils.e("screen info:", dm.densityDpi+"");
+        double phoneSize = Math.sqrt((dm.widthPixels * dm.widthPixels + dm.heightPixels * dm.heightPixels)) / dm.densityDpi;
+        LogUtils.e("screen info:", phoneSize+"");
+
         screenWidth = dm.widthPixels;
         times = 0;// 每次重新加载是初始画请求次数
 
@@ -120,10 +128,8 @@ public class HomeFragement extends Fragment {
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 String label = DateUtils.formatDateTime(mContext, System.currentTimeMillis(),
                         DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-
                 // Update the LastUpdatedLabel
                 refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-
                 // Do work to refresh the list here.
                 times ++;
                 if (getHomeListTask != null) {
@@ -131,12 +137,21 @@ public class HomeFragement extends Fragment {
                 }
                 getHomeListTask = new GetHomeListTask();
                 getHomeListTask.execute();
-
             }
         });
         lv = mPullRefreshListView.getRefreshableView();
-//        lv = new ListView(mContext);
         lv.addHeaderView(view);
+//        mPullRefreshListView.addView(view, 0);
+
+//        ViewGroup parent = ((ViewGroup)lv.getParent());
+//        for (int index = 0; index < parent.getChildCount(); index++) {
+//            View child = parent.getChildAt(index);
+//            if (child == lv){
+//                int insertIndex = Math.max(0, (index-1));
+//                parent.addView(view, insertIndex);
+//                break;
+//            }
+//        }
 
         initDatas();
         registerLister();
@@ -178,12 +193,15 @@ public class HomeFragement extends Fragment {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    int adCount = adList.size();
-                    int currentAd = vpAd.getCurrentItem();
-                    int nextAd = (currentAd + 1) % adCount;
-                    vpAd.setCurrentItem(nextAd);
-                    changePosition(nextAd);
-                    this.sendEmptyMessageDelayed(1, 2000);
+                    if( adList.size() > 1 ){
+                        int adCount = adList.size();
+                        int currentAd = vpAd.getCurrentItem();
+                        int nextAd = (currentAd + 1) % adCount;
+                        vpAd.setCurrentItem(nextAd);
+                        changePosition(nextAd);
+                        this.sendEmptyMessageDelayed(1, 2000);
+                    }
+
                     break;
                 default:
                     break;

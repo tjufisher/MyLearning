@@ -8,22 +8,27 @@ import android.os.Environment;
 public class Constants {
 
     public static final String MESSAGE_NAME = "messageName";
-    public static Boolean IS_HOME = false;
 
     public static final String ENCODING = "UTF-8";
-    public static final String REQUEST_METHOD = "POST";
+    public static final String REQUEST_GET = "GET";
+    public static final String REQUEST_POST = "POST";
 
     public static final String HTTP_SAFETY_SCHEME = "https";
     public static final String HTTP_SCHEME = "http";
 
-//    public static final String IP = "127.0.0.1";
-    public static final String IP = "192.168.115.230";
+    public static int DEVELOP_POSITION = 0;
+    public static final int DEVELOP_POSITION_DEFAULT = 0;
+    public static final int DEVELOP_POSITION_WORK = 1;
+    public static final int DEVELOP_POSITION_HOME = 2;
+    public static final String IP_DEFAULT = "182.92.226.35";
+    public static final String IP_WORK = "192.168.115.230";
     public static final String IP_HOME = "192.168.1.104";
 
+    public static final String PORT_DEFAULT = "80";
     public static final String PORT = "8080";
     public static final String METHOD = "/HTTP/GetDataServlet";
 
-    private static String HTTP_URL = HTTP_SCHEME + "://" + IP + ":" + PORT + METHOD;
+    private static String HTTP_URL = HTTP_SCHEME + "://" + IP_DEFAULT + ":" + PORT + METHOD;
 
     /** SD卡目录 */
     public static final String SD_PATH = Environment.getExternalStorageDirectory()
@@ -57,10 +62,14 @@ public class Constants {
     public static final String MM_VOICE_CACHE_DIR_PATH = CACHE_DIR_PATH + "/mm_voice_cache";
 
     public static String getURL(){
-        if(IS_HOME){
+        if(DEVELOP_POSITION == DEVELOP_POSITION_DEFAULT){
+            HTTP_URL = HTTP_SCHEME + "://" + IP_DEFAULT + METHOD;
+        }else if(DEVELOP_POSITION == DEVELOP_POSITION_WORK) {
+            HTTP_URL = HTTP_SCHEME + "://" + IP_WORK + ":" + PORT + METHOD;
+        }else if(DEVELOP_POSITION == DEVELOP_POSITION_HOME){
             HTTP_URL = HTTP_SCHEME + "://" + IP_HOME + ":" + PORT + METHOD;
         }else{
-            HTTP_URL = HTTP_SCHEME + "://" + IP + ":" + PORT + METHOD;
+
         }
         return HTTP_URL;
     }

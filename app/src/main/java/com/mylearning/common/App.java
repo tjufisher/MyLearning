@@ -44,7 +44,6 @@ public class App extends Application{
 
     public void init(){
         mLocationUtils.startLocation();
-        LogUtils.e("1", "1");
     }
 
 

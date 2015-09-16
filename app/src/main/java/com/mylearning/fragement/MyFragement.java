@@ -118,13 +118,19 @@ public class MyFragement extends Fragment {
 
     @OnClick(R.id.personal_mine_update)
     public void change(){
-        if(Constants.IS_HOME){
-            Constants.IS_HOME = false;
-            Toast.makeText(mContext, "work interface", Toast.LENGTH_SHORT).show();
-        }else{
-            Constants.IS_HOME = true;
-            Toast.makeText(mContext, "home interface", Toast.LENGTH_SHORT).show();
+        Constants.DEVELOP_POSITION = (Constants.DEVELOP_POSITION + 1) % 3;
+        switch (Constants.DEVELOP_POSITION){
+            case 0:
+                Toast.makeText(mContext, "default workspace", Toast.LENGTH_SHORT).show();
+                break;
+            case 1:
+                Toast.makeText(mContext, "work workspace", Toast.LENGTH_SHORT).show();
+                break;
+            case 2:
+                Toast.makeText(mContext, "home workspace", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
         }
-
     }
 }
