@@ -15,4 +15,6 @@ public class HomeListContent implements Serializable {
 	public Integer sellNum;
 	public String tag;
 	public String adUrl;
+
+	public Double distance = 0.0;
 }

@@ -29,10 +29,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.mylearning.R;
 import com.mylearning.adapter.HomeListAdapter;
+import com.mylearning.common.App;
 import com.mylearning.common.Constants;
 import com.mylearning.entity.AdInfo;
 import com.mylearning.entity.HomeListContent;
@@ -47,6 +51,7 @@ import com.mylearning.view.WrapContentViewPager;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,8 +63,6 @@ import butterknife.OnClick;
 
 
 public class HomeFragement extends Fragment {
-    //    @InjectView(R.id.et)
-//    EditText et;
 
     @InjectView(R.id.ll_imgswitch)
     LinearLayout llImgswitch;
@@ -69,6 +72,14 @@ public class HomeFragement extends Fragment {
     WrapContentViewPager vpAd;
     @InjectView(R.id.btn)
     Button btn;
+    @InjectView(R.id.btn_evaluate)
+    Button btnEvaluate;
+    @InjectView(R.id.ll_evaluate)
+    LinearLayout llEvaluate;
+    @InjectView(R.id.btn_distance)
+    Button btnDistance;
+    @InjectView(R.id.ll_distance)
+    LinearLayout llDistance;
 
 
     private Context mContext;
@@ -111,12 +122,12 @@ public class HomeFragement extends Fragment {
         ButterKnife.inject(this, view);
 
         DisplayMetrics dm = getResources().getDisplayMetrics();
-        LogUtils.e("screen info:", dm.widthPixels+"");
-        LogUtils.e("screen info:", dm.heightPixels+"");
-        LogUtils.e("screen info:", dm.density+"");
-        LogUtils.e("screen info:", dm.densityDpi+"");
+        LogUtils.e("screen info:", dm.widthPixels + "");
+        LogUtils.e("screen info:", dm.heightPixels + "");
+        LogUtils.e("screen info:", dm.density + "");
+        LogUtils.e("screen info:", dm.densityDpi + "");
         double phoneSize = Math.sqrt((dm.widthPixels * dm.widthPixels + dm.heightPixels * dm.heightPixels)) / dm.densityDpi;
-        LogUtils.e("screen info:", phoneSize+"");
+        LogUtils.e("screen info:", phoneSize + "");
 
         screenWidth = dm.widthPixels;
         times = 0;// 每次重新加载是初始画请求次数
@@ -131,7 +142,7 @@ public class HomeFragement extends Fragment {
                 // Update the LastUpdatedLabel
                 refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
                 // Do work to refresh the list here.
-                times ++;
+                times++;
                 if (getHomeListTask != null) {
                     getHomeListTask.cancel(true);
                 }
@@ -193,7 +204,7 @@ public class HomeFragement extends Fragment {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    if( adList.size() > 1 ){
+                    if (adList.size() > 1) {
                         int adCount = adList.size();
                         int currentAd = vpAd.getCurrentItem();
                         int nextAd = (currentAd + 1) % adCount;
@@ -472,13 +483,18 @@ public class HomeFragement extends Fragment {
             super.onPostExecute(result);
             if (null != result && null != result.bean) {
                 Result r = (Result) result.bean;
-                if( r.result != null && r.message != null){
-                    if ( r.result.equals("100")) {
+                if (r.result != null && r.message != null) {
+                    if (r.result.equals("100")) {
                         if (result.list != null && result.list.size() > 0) {
                             List<HomeListContent> contentList = result.list;
-//                        for (HomeListContent content : contentList) {
-//                            homeContentList.addAll(contentList);
-//                        }
+
+                            BDLocation mLocation = App.getSelf().getmLocationUtils().getmLocation();
+                            LatLng latLngCurrent = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+                            for (HomeListContent content : contentList) {
+                                LatLng latLngObject = new LatLng(content.latitude, content.longitude);
+                                Double distance = DistanceUtil.getDistance(latLngCurrent, latLngObject);
+                                content.distance = distance;
+                            }
 //                        三次逆序，实现讲后获取到的数据放置在原有数据前面
                             Collections.reverse(homeContentList);
                             Collections.reverse(contentList);
@@ -489,12 +505,12 @@ public class HomeFragement extends Fragment {
                     } else {
                         t(r.message);
                     }
-                }else{
+                } else {
                     t("没有新的数据了");
                 }
 
                 homeListAdapter.update(homeContentList);
-                if( times != 0){
+                if (times != 0) {
                     mPullRefreshListView.onRefreshComplete();
                 }
 
@@ -534,16 +550,16 @@ public class HomeFragement extends Fragment {
         handler.removeMessages(1);
     }
 
-    public interface ShowInMap{
+    public interface ShowInMap {
         public <T> void showPoints(List<T> list);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try{
-            mCallback = (ShowInMap)activity;
-        }catch (ClassCastException e){
+        try {
+            mCallback = (ShowInMap) activity;
+        } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement ShowInMap interface");
         }
@@ -552,11 +568,75 @@ public class HomeFragement extends Fragment {
 
     @OnClick(R.id.btn)
     public void mapShow() {
-        if( homeContentList != null && homeContentList.size() > 0){
-//            ((MainActivity)getActivity()).changeFragement(1);
+        if (homeContentList != null && homeContentList.size() > 0) {
             mCallback.showPoints(homeContentList);
-
         }
+    }
+
+    int evaluateFlag = 0;
+
+    /**
+     * 按评价排序
+     */
+    @OnClick({R.id.ll_evaluate, R.id.btn_evaluate})
+    public void sortByEvaluate() {
+        evaluateFlag = (++evaluateFlag) % 2;
+        switch (evaluateFlag) {
+            case 0:
+                btnEvaluate.setSelected(false);
+//                从小到大
+                Collections.sort(homeContentList, new Comparator<HomeListContent>() {
+                    @Override
+                    public int compare(HomeListContent lhs, HomeListContent rhs) {
+                        return lhs.rate.compareTo(rhs.rate);
+                    }
+                });
+                break;
+            case 1:
+                btnEvaluate.setSelected(true);
+//                从大到小
+                Collections.sort(homeContentList, new Comparator<HomeListContent>() {
+                    @Override
+                    public int compare(HomeListContent lhs, HomeListContent rhs) {
+                        return rhs.rate.compareTo(lhs.rate);
+                    }
+                });
+                break;
+            default:
+        }
+        homeListAdapter.update(homeContentList);
+    }
+
+    int distanceFlag = 0;
+
+    /**
+     * 按距离排序
+     */
+    @OnClick({R.id.ll_distance, R.id.btn_distance})
+    public void sortByDistance() {
+        distanceFlag = (++distanceFlag) % 2;
+        switch (distanceFlag) {
+            case 0:
+                btnDistance.setSelected(false);
+                Collections.sort(homeContentList, new Comparator<HomeListContent>() {
+                    @Override
+                    public int compare(HomeListContent lhs, HomeListContent rhs) {
+                        return rhs.distance.compareTo(lhs.distance);
+                    }
+                });
+                break;
+            case 1:
+                btnDistance.setSelected(true);
+                Collections.sort(homeContentList, new Comparator<HomeListContent>() {
+                    @Override
+                    public int compare(HomeListContent lhs, HomeListContent rhs) {
+                        return lhs.distance.compareTo(rhs.distance);
+                    }
+                });
+                break;
+            default:
+        }
+        homeListAdapter.update(homeContentList);
     }
 
 }

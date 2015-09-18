@@ -48,25 +48,55 @@
              android:layout_width="fill_parent"
              android:layout_height="wrap_content"
              android:orientation="horizontal">
-             <TextView
+
+             <LinearLayout
+                 android:id="@+id/ll_evaluate"
                  android:layout_width="0dp"
                  android:layout_weight="1"
                  android:layout_height="wrap_content"
-                 android:gravity="center_horizontal"
-                 android:drawableRight="@drawable/home_filter"
-                 android:text="评价"/>
-             <TextView
+                 android:layout_gravity="center"
+                 android:gravity="center">
+                 <Button
+                     android:id="@+id/btn_evaluate"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_gravity="center"
+                     android:background="@null"
+                     android:drawableRight="@drawable/home_filter"
+                     android:drawablePadding="5dp"
+                     android:textSize="16sp"
+                     android:textColor="@color/gray_888"
+                     android:text="评价"/>
+             </LinearLayout>
+
+             <LinearLayout
+                 android:id="@+id/ll_distance"
                  android:layout_width="0dp"
                  android:layout_weight="1"
                  android:layout_height="wrap_content"
-                 android:gravity="center_horizontal"
-                 android:drawableRight="@drawable/home_filter"
-                 android:text="距离"/>
+                 android:layout_gravity="center"
+                 android:gravity="center">
+                 <Button
+                     android:id="@+id/btn_distance"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_gravity="center"
+                     android:background="@null"
+                     android:drawableRight="@drawable/home_filter"
+                     android:drawablePadding="5dp"
+                     android:textSize="16sp"
+                     android:textColor="@color/gray_888"
+                     android:text="距离"/>
+             </LinearLayout>
+
+
              <Button
                  android:id="@+id/btn"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
-                 android:textSize="14sp"
+                 android:background="@color/wuse"
+                 android:textSize="16sp"
+                 android:textColor="@color/red_new"
                  android:text="地图显示所有"/>
          </LinearLayout>
 
