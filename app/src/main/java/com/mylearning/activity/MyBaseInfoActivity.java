@@ -1,21 +1,12 @@
 package com.mylearning.activity;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -23,11 +14,14 @@ import android.widget.Toast;
 
 import com.mylearning.R;
 import com.mylearning.base.BaseActivity;
+import com.mylearning.utils.FileUtils;
+import com.mylearning.utils.IntentUtils;
 import com.mylearning.utils.LogUtils;
 import com.mylearning.view.MiddlePopWindow;
 import com.mylearning.view.RoundImageView;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 
 import butterknife.ButterKnife;
@@ -84,7 +78,10 @@ public class MyBaseInfoActivity extends BaseActivity {
     private MiddlePopWindow popupWindow;
 
     private static final int REQUEST_CODE_CAPTURE_CAMEIA = 0;//拍照
-    private static final int REQUEST_CODE_PICK_IMAGE = 1;//相册
+    private static final int REQUEST_CODE_PICK_IMAGE = 1;//相册,SDK 19以上
+    private static final int REQUEST_CODE_PICK_IMAGE_OLD = 2;//相册,SDK 19以下
+
+    File tempFile = null;
 
 
     @Override
@@ -107,20 +104,33 @@ public class MyBaseInfoActivity extends BaseActivity {
 
                     break;
                 case R.id.btn_take_photo:
-                    String state = Environment.getExternalStorageState();
-                    if (state.equals(Environment.MEDIA_MOUNTED)) {
-                        Intent getImageByCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(getImageByCamera, REQUEST_CODE_CAPTURE_CAMEIA);
+                    tempFile = FileUtils.getTempPath();
+                    if (tempFile == null) {
+                        toast("sd卡不可用");
+                        return;
                     }
-                    else {
-                        Toast.makeText(getApplicationContext(), "请确认已经插入SD卡", Toast.LENGTH_LONG).show();
+                    if (tempFile != null) {
+                        try {
+                            startActivityForResult(
+                                    IntentUtils.createShotIntent(tempFile),
+                                    REQUEST_CODE_CAPTURE_CAMEIA);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
+
                     break;
                 case R.id.btn_pick_photo:
                     Intent intent = new Intent(Intent.ACTION_PICK);
                     intent.setType("image/*");//相片类型
                     startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
-
+                    if (android.os.Build.VERSION.SDK_INT >= 19) {
+                        startActivityForResult(IntentUtils.createAlbumIntent(),
+                                REQUEST_CODE_PICK_IMAGE);
+                    } else {
+                        startActivityForResult(IntentUtils.createAlbumIntent(),
+                                REQUEST_CODE_PICK_IMAGE_OLD);
+                    }
                     break;
                 case R.id.btn_cancel:
                     popupWindow.dismiss();
@@ -136,6 +146,175 @@ public class MyBaseInfoActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+
+//
+//
+//        if (resultCode == RESULT_OK) {
+//            imagePath = "";
+//            if (requestCode == PICK_PIC_CAMERA) {
+//                Uri uri = Uri.fromFile(tempFile);
+//                Log.e(tag, uri.toString());
+//                if (android.os.Build.VERSION.SDK_INT >= 19) {
+//                    AlbumAndComera.getImageClipIntent(uri, this, true);
+//                } else {
+//                    AlbumAndComera.getImageClipIntent(uri, this, false);
+//                }
+//
+//            } else if (requestCode == PICK_PIC_OLD || requestCode == PICK_PIC_KITKAT) {
+//                if (null == data) {
+//                    return;
+//                }
+//                albumUri = data.getData();
+//                tempFile = null;
+//                if (android.os.Build.VERSION.SDK_INT >= 19) {
+//                    AlbumAndComera.getImageClipIntent(albumUri, this, true);
+//                } else {
+//                    AlbumAndComera.getImageClipIntent(albumUri, this, false);
+//                }
+//
+//            } else if (requestCode == SoufunConstants.CHOOSE_CUT && null != data) {
+//                if (tempFile != null) {
+//                    try {
+//                        if (tempFile.length() > 0) {
+//                            String filePath = "";
+//
+//                            if (tempFile != null) {
+//                                if (tempFile.length() > 0) {
+//                                    options.inPreferredConfig = Bitmap.Config.RGB_565;
+//                                    try {
+//                                        filePath = tempFile.getAbsolutePath();
+//                                        imagePath = filePath;
+//                                        AlbumAndComera.compressForupload(imagePath);
+//                                    } catch (IOException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    if (!StringUtils.isNullOrEmpty(imagePath)) {
+//                                        showDialog = Utils.showProcessDialog(MyAcountActivity.this,
+//                                                "正在上传头像");
+//                                        new Thread(new Runnable() {
+//
+//                                            @Override
+//                                            public void run() {
+//                                                if (android.os.Build.VERSION.SDK_INT >= 19
+//                                                        || null == data.getData()) {
+//                                                    try {
+//                                                        Bitmap bitmap = (Bitmap) data.getExtras()
+//                                                                .getParcelable("data");
+//                                                        Uri uri = Uri.parse(MediaStore.Images.Media
+//                                                                .insertImage(getContentResolver(),
+//                                                                        bitmap, null, null));
+//                                                        imagePath = HttpApi.uploadFile(AlbumAndComera
+//                                                                .getAlbumPath(mContext, uri));
+//                                                    } catch (Exception e) {
+//                                                        imagePath = HttpApi.uploadFile(imagePath);
+//                                                    }
+//                                                } else {
+//                                                    imagePath = HttpApi.uploadFile(AlbumAndComera
+//                                                            .getAlbumPath(mContext, data));
+//                                                }
+//                                                imageUrl = imagePath;
+//                                                Log.i("hwq", "" + imageUrl);
+//                                                myPhotoTask = new MyPhotoTask();
+//                                                myPhotoTask.execute();
+//                                                mHandler.sendEmptyMessage(0);
+//                                            }
+//                                        }).start();
+//                                    }
+//                                }
+//                            } else {
+//                                toast("上传图片失败");
+//                                UtilsLog.e("msg", "上传图片失败");
+//                            }
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    if (android.os.Build.VERSION.SDK_INT >= 19 || null == data.getData()) {// 4.4之后
+//                        try {
+//
+//                            imagePath = AlbumAndComera.getAlbumPath(mContext, albumUri);
+//                            Log.i("MyCat", "return data(false):" + imagePath);
+//                            if (!StringUtils.isNullOrEmpty(imagePath)) {
+//                                showDialog = Utils.showProcessDialog(MyAcountActivity.this,
+//                                        "正在上传头像");
+//                                new Thread(new Runnable() {
+//
+//                                    @Override
+//                                    public void run() {
+//                                        try {
+//                                            Bitmap bitmap = (Bitmap) data.getExtras()
+//                                                    .getParcelable("data");
+//                                            Uri uri = Uri.parse(MediaStore.Images.Media
+//                                                    .insertImage(getContentResolver(), bitmap,
+//                                                            null, null));
+//                                            imagePath = HttpApi.uploadFile(AlbumAndComera
+//                                                    .getAlbumPath(mContext, uri));
+//                                        } catch (Exception e) {
+//                                            imagePath = HttpApi.uploadFile(AlbumAndComera
+//                                                    .getAlbumPath(mContext, albumUri));
+//                                        }
+//                                        imageUrl = imagePath;
+//                                        myPhotoTask = new MyPhotoTask();
+//                                        myPhotoTask.execute();
+//                                        mHandler.sendEmptyMessage(0);
+//                                    }
+//                                }).start();
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    } else {// 4.4之前
+//                        InputStream is = null;
+//                        String filePath = "";
+//                        options.inPreferredConfig = Bitmap.Config.RGB_565;
+//                        Uri uri = data.getData();
+//                        try {
+//                            ContentResolver contentResolver = mContext.getContentResolver();
+//                            is = contentResolver.openInputStream(uri);
+//                            filePath = AlbumAndComera.convertStream2File(is);
+//                            imagePath = filePath;
+//                            AlbumAndComera.compressForupload(imagePath);
+//                        } catch (FileNotFoundException e) {
+//                            e.printStackTrace();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        if (!StringUtils.isNullOrEmpty(imagePath)) {
+//                            showDialog = Utils.showProcessDialog(MyAcountActivity.this, "正在上传头像");
+//                            new Thread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    imagePath = HttpApi.uploadFile(AlbumAndComera.getAlbumPath(
+//                                            mContext, data));
+//                                    imageUrl = imagePath;
+//                                    myPhotoTask = new MyPhotoTask();
+//                                    myPhotoTask.execute();
+//                                    mHandler.sendEmptyMessage(0);
+//                                }
+//                            }).start();
+//                        }
+//                    }
+//                }
+//            } else if (requestCode == 100) {
+//                setResult(RESULT_OK);
+//                finish();
+//            } else if (requestCode == 520) {
+//                String mobile_new = data.getStringExtra("mobile_new");
+//                if (!StringUtils.isNullOrEmpty(mobile_new)) {
+//                    tv_telephone2.setText(mobile_new);
+//                }
+//            }
+//        }
+//
+//
+//        
+
+
+
+
+
         Uri uri = null;
         switch (requestCode){
             case  REQUEST_CODE_CAPTURE_CAMEIA:
@@ -157,6 +336,10 @@ public class MyBaseInfoActivity extends BaseActivity {
             case REQUEST_CODE_PICK_IMAGE:
                 uri = data.getData();
                 break;
+             case REQUEST_CODE_PICK_IMAGE_OLD:
+                uri = data.getData();
+                break;
+
             default:
                 break;
         }

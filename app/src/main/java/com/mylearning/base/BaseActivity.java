@@ -6,14 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mylearning.R;
 import com.mylearning.utils.StringUtils;
@@ -143,6 +142,19 @@ public class BaseActivity extends Activity implements View.OnClickListener{
 
     public void handleHeaderEvent1(){}
     public void handleHeaderEvent2(){}
+
+    /**
+     * toast（默认 时间Toast.LENGTH_LONG）
+     *
+     * @param msg
+     *            内容
+     */
+    protected void toast(String msg) {
+        if (StringUtils.isNullOrEmpty(msg)) {
+            return;
+        }
+        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT );
+    }
 
     /**
      * 启动activity带有动画切换

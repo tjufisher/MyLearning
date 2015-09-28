@@ -2,15 +2,29 @@ package com.mylearning.base;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
-import android.inputmethodservice.KeyboardView;
+import android.widget.Toast;
 
 import com.mylearning.R;
+import com.mylearning.utils.StringUtils;
 
 /**
  * Created by user on 2015/8/17.
  */
 public class BaseFragement extends Fragment {
+    protected Context mContext;
+
+    public BaseFragement(){
+        mContext = getActivity();
+    }
+
+    protected void toast(String msg) {
+        if (StringUtils.isNullOrEmpty(msg)) {
+            return;
+        }
+        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT);
+    }
 
     /**
      * 启动activity带有动画切换
