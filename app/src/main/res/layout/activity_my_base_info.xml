@@ -23,221 +23,46 @@
             android:layout_marginTop="10dp"
             android:background="@color/mine_gray2" />
 
-        <RelativeLayout
-            android:id="@+id/rl_base_info"
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:background="@drawable/selector_list_row"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp" >
-
-            <com.mylearning.view.RoundImageView
-                android:id="@+id/riv_base_info"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:scaleType="fitXY"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:layout_alignParentLeft="true"
-                app:outsideRoundColor="@color/gray_888"
-                app:roundThickness="1dp"
-                android:src="@drawable/lml"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_toRightOf="@id/riv_base_info"
-                android:paddingLeft="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_base_info_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="bottom"
-                    android:text="蓝天海水 Lv 3"
-                    android:paddingBottom="2dp"
-                    android:textColor="@color/mine_gray1"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/tv_base_info_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="top"
-                    android:paddingTop="2dp"
-                    android:text="186****1234"
-                    android:textColor="@color/mine_gray3"
-                    android:textSize="14sp" />
-
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/daily_arrow_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/mine_arrow_right" />
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/mine_gray2" />
-
-        <LinearLayout
-            android:id="@+id/ll_info"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@color/white"
-            android:paddingTop="20dp"
-            android:paddingBottom="15dp">
-
-            <LinearLayout
-                android:id="@+id/ll_balance"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:gravity="center">
-                <TextView
-                    android:id="@+id/tv_balance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/my_fragement_text_size"
-                    android:textColor="@color/pink_light"
-                    android:text="0.00元"
-                    />
-                <TextView
-                    android:id="@+id/tv_balance_des"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/my_fragement_text_small_size"
-                    android:textColor="@color/gray68"
-                    android:text="我的余额"
-                    />
-            </LinearLayout>
-
-            <View
-                android:layout_width="1px"
-                android:layout_height="fill_parent"
-                android:background="@color/gray_888"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                />
-
-            <LinearLayout
-                android:id="@+id/ll_hongbao"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:gravity="center">
-                <TextView
-                    android:id="@+id/tv_hongbao"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/my_fragement_text_size"
-                    android:textColor="@color/pink_light"
-                    android:text="1个"
-                    />
-                <TextView
-                    android:id="@+id/tv_hongbao_des"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/my_fragement_text_small_size"
-                    android:textColor="@color/gray68"
-                    android:text="我的红包"
-                    />
-            </LinearLayout>
-
-            <View
-                android:layout_width="1px"
-                android:layout_height="fill_parent"
-                android:background="@color/gray_888"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                />
-
-            <LinearLayout
-                android:id="@+id/ll_jf"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:gravity="center">
-                <TextView
-                    android:id="@+id/tv_jf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/my_fragement_text_size"
-                    android:textColor="@color/pink_light"
-                    android:text="8341"
-                    />
-                <TextView
-                    android:id="@+id/tv_jf_des"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/my_fragement_text_small_size"
-                    android:textColor="@color/gray68"
-                    android:text="我的积分"
-                    />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/mine_gray2" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginTop="10dp"
-            android:background="@color/mine_gray2" />
-
-
-
 
         <RelativeLayout
-            android:id="@+id/personal_mine_integral"
+            android:id="@+id/rl_header_photo"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="60dp"
             android:background="@drawable/selector_list_row"
             android:paddingLeft="15dp"
             android:paddingRight="15dp" >
 
             <TextView
-                android:id="@+id/personal_mine_integral_label"
+                android:id="@+id/tv_header_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:drawablePadding="15dp"
-                android:text="我的收藏"
+                android:text="头像"
                 android:textColor="@color/mine_gray1"
                 android:textSize="15sp" />
 
 
+            <com.mylearning.view.RoundImageView
+                android:id="@+id/riv_header_photo"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="fitXY"
+                android:layout_toLeftOf="@+id/tv_header_photo_integral_text"
+                app:outsideRoundColor="@color/gray_888"
+                app:roundThickness="1dp"
+                android:src="@drawable/lml"/>
+
             <TextView
-                android:id="@+id/personal_mine_integral_text"
+                android:id="@+id/tv_header_photo_integral_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:drawablePadding="12dp"
-                android:text="我的等级 积分 8341"
-                android:drawableRight="@drawable/mine_arrow_right"
-                android:textColor="@color/mine_gray3"
-                android:textSize="14sp" />
+                android:drawableRight="@drawable/mine_arrow_right" />
         </RelativeLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -250,6 +75,8 @@
                 android:layout_marginLeft="15dp"
                 android:background="@color/mine_gray2" />
         </LinearLayout>
+
+
 
         <RelativeLayout
             android:id="@+id/personal_mine_message"
@@ -266,19 +93,11 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:drawablePadding="15dp"
-                android:text="消息中心"
+                android:text="用户名"
                 android:textColor="@color/mine_gray1"
                 android:textSize="15sp" />
 
-            <ImageView
-                android:id="@+id/personal_mine_message_red_point"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="6dp"
-                android:layout_toRightOf="@+id/personal_mine_message_label"
-                android:src="@drawable/mine_red_point"
-                />
+
 
             <TextView
                 android:id="@+id/my_favorite_count"
@@ -288,9 +107,57 @@
                 android:layout_centerVertical="true"
                 android:drawablePadding="12dp"
                 android:drawableRight="@drawable/mine_arrow_right"
-                android:textColor="@color/mine_gray1"
+                android:text="4555df1a"
+                android:textColor="@color/mine_gray3"
                 android:textSize="14sp" />
         </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/mine_white" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="15dp"
+                android:background="@color/mine_gray2" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_address"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/selector_list_row"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp" >
+
+            <TextView
+                android:id="@+id/tv_address_des"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:drawablePadding="15dp"
+                android:text="收货地址"
+                android:textColor="@color/mine_gray1"
+                android:textSize="15sp" />
+
+
+
+            <TextView
+                android:id="@+id/tv_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:drawablePadding="12dp"
+                android:drawableRight="@drawable/mine_arrow_right"
+                android:text="4个"
+                android:textColor="@color/mine_gray3"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
 
         <View
             android:layout_width="match_parent"
@@ -317,21 +184,10 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:drawablePadding="15dp"
-                android:text="认证中心"
-                android:textColor="@color/mine_gray1"
+                android:text="账号设置"
+                android:textColor="@color/mine_gray2"
                 android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/personal_mine_auth_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:drawablePadding="12dp"
-                android:text="认证等级越高得金豆越多"
-                android:drawableRight="@drawable/mine_arrow_right"
-                android:textColor="@color/mine_gray3"
-                android:textSize="14sp" />
         </RelativeLayout>
 
         <LinearLayout
@@ -360,7 +216,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:drawablePadding="15dp"
-                android:text="设置"
+                android:text="手机"
                 android:textColor="@color/mine_gray1"
                 android:textSize="15sp" />
 
@@ -371,7 +227,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:drawablePadding="12dp"
-                android:text="修改密码 填写兑换信息"
+                android:text="186****1234"
                 android:drawableRight="@drawable/mine_arrow_right"
                 android:textColor="@color/mine_gray3"
                 android:textSize="14sp" />
@@ -403,7 +259,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:drawablePadding="15dp"
-                android:text="签到"
+                android:text="微信"
                 android:textColor="@color/mine_gray1"
                 android:textSize="15sp" />
 
@@ -414,7 +270,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:drawablePadding="12dp"
-                android:text="签到获得积分"
+                android:text="未绑定"
                 android:drawableRight="@drawable/mine_arrow_right"
                 android:textColor="@color/mine_gray3"
                 android:textSize="14sp" />
@@ -446,7 +302,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:drawablePadding="15dp"
-                android:text="分享得积分"
+                android:text="QQ"
                 android:textColor="@color/mine_gray1"
                 android:textSize="15sp" />
 
@@ -457,8 +313,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:drawablePadding="12dp"
-                android:text="暂缓开通"
                 android:drawableRight="@drawable/mine_arrow_right"
+                android:text="未绑定"
                 android:textColor="@color/mine_gray3"
                 android:textSize="14sp" />
         </RelativeLayout>
@@ -488,20 +344,9 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:drawablePadding="15dp"
-                android:text="帮助说明"
-                android:textColor="@color/mine_gray1"
+                android:text="安全设置"
+                android:textColor="@color/mine_gray2"
                 android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/personal_mine_help_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:drawablePadding="12dp"
-                android:drawableRight="@drawable/mine_arrow_right"
-                android:textColor="@color/mine_pink"
-                android:textSize="14sp" />
 
 
         </RelativeLayout>
@@ -532,7 +377,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:drawablePadding="15dp"
-                android:text="意见建议"
+                android:text="密码"
                 android:textColor="@color/mine_gray1"
                 android:textSize="15sp" />
 
@@ -544,94 +389,16 @@
                 android:layout_centerVertical="true"
                 android:drawablePadding="12dp"
                 android:drawableRight="@drawable/mine_arrow_right"
-                android:textColor="@color/mine_gray1"
-                android:textSize="14sp" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/mine_white" >
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="15dp"
-                android:background="@color/mine_gray2" />
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/personal_mine_about"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/selector_list_row"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:drawablePadding="15dp"
-                android:text="关于我们"
-                android:textColor="@color/mine_gray1"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/personal_mine_about_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:drawablePadding="12dp"
-                android:drawableRight="@drawable/mine_arrow_right"
-                android:textColor="@color/mine_gray1"
-                android:textSize="14sp" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/mine_white" >
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginLeft="15dp"
-                android:background="@color/mine_gray2" />
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/personal_mine_update"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/selector_list_row"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:drawablePadding="15dp"
-                android:text="版本升级"
-                android:textColor="@color/mine_gray1"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/personal_mine_update_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:drawablePadding="12dp"
-                android:text="当前版本1.2"
-                android:drawableRight="@drawable/mine_arrow_right"
+                android:text="修改"
                 android:textColor="@color/mine_gray3"
-                android:textSize="14sp" />
+                android:textSize="14sp"  />
         </RelativeLayout>
+
+
+
+
+
+
 
         <View
             android:layout_width="match_parent"

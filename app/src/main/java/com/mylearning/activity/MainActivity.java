@@ -34,6 +34,7 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
     private Context mContext;
     private RadioButton[] radioButtons;
     private Fragment[] tabs ;
+    private String[] titles;
     private int lastTabIndex = 0;
     private final String TAG_CURRENT_FRAGMENT = "MainActivity.current_fragment";
 
@@ -42,7 +43,7 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main, LAYOUT_TYPE_HEADER);
         ButterKnife.inject(this);
-        setHeaderBar("欢迎页面", R.drawable.share);
+        setHeaderBar("首页", R.drawable.share);
         mContext = this;
         initDatas();
 
@@ -53,17 +54,15 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
 
     }
 
-    public void changeFragement(int index){
-        for (int i = 0; i < radioButtons.length; i++) {
-//            radioButtons[i].setSelected( i == index);
-
-                radioButtons[i].setChecked(i == index);
-
-        }
-
-    }
 
     public void initDatas(){
+        titles = new String[4];
+        titles[0] = "首页";
+        titles[1] = "发现";
+        titles[2] = "排行";
+        titles[3] = "我";
+
+
         tabs = new Fragment[4];
         tabs[0] = new HomeFragement();
         tabs[1] = new LocationFragement();
@@ -95,6 +94,7 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
                        ft.remove(tabs[lastTabIndex]);
                        lastTabIndex = i;
                        radioButtons[i].setSelected(true);
+                       setHeaderBar(titles[i], R.drawable.share);
                        Fragment f = getFragmentManager().findFragmentByTag(TAG_CURRENT_FRAGMENT + i);
 
                        if( null == f){

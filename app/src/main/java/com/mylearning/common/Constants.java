@@ -61,6 +61,20 @@ public class Constants {
     /** 多媒体沟通，音频缓存目录 */
     public static final String MM_VOICE_CACHE_DIR_PATH = CACHE_DIR_PATH + "/mm_voice_cache";
 
+
+    /** 缓存 **/
+    public static final long THIRTY_SECONDS = 30 * 1000;
+    public static final long FIVE_MINUTES = 5 * 60000;
+    public static final long FIFTEEN_MINUTES = 15 * 60000;
+    public static final long TWENTY_MINUTES = 20 * 60000;
+    public static final long ONE_HOUR = 60 * 60000;
+    public static final long ONE_DAY = 24 * 60 * 60000;
+    public static final long TWELVE_HOUR = 12 * 60 * 60000;
+    public static final long ONE_NEGATIVE = -1;
+    public static final long ONE_POSITIVE = 1;// 仅当网络不可用时使用缓存
+    public static final long ONE_WEEK = 7 * 24 * 60 * 60000;
+
+
     public static String getURL(){
         if(DEVELOP_POSITION == DEVELOP_POSITION_DEFAULT){
             HTTP_URL = HTTP_SCHEME + "://" + IP_DEFAULT + METHOD;

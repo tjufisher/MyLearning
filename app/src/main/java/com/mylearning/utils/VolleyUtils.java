@@ -19,6 +19,7 @@ import com.mylearning.R;
  */
 public class VolleyUtils {
     private Context mContext;
+    private String TAG = getClass().getSimpleName();
     private static RequestQueue mQueue;
     private static VolleyUtils volleyUtils;
     private ImageRequest imageRequest = null;
@@ -32,16 +33,16 @@ public class VolleyUtils {
 
     }
 
-    public static VolleyUtils createInstance( Context context){
-        if ( volleyUtils == null){
+    public static VolleyUtils createInstance(Context context) {
+        if (volleyUtils == null) {
             volleyUtils = new VolleyUtils(context);
         }
         return volleyUtils;
     }
 
-    public void doImageRequest(String url, final ImageView imageView, final int default_pic){
-        imageListener = ImageLoader.getImageListener(imageView,R.drawable.default_loading,default_pic);
-        imageLoader.get(url , imageListener);
+    public void doImageRequest(String url, final ImageView imageView, final int default_pic) {
+        imageListener = ImageLoader.getImageListener(imageView, R.drawable.default_loading, default_pic);
+        imageLoader.get(url, imageListener);
 
 
 //        imageRequest = new ImageRequest(
@@ -61,16 +62,17 @@ public class VolleyUtils {
     }
 
     public class BitmapCache implements ImageLoader.ImageCache {
-        private LruCache<String,Bitmap> cache;
+        private LruCache<String, Bitmap> cache;
 
         public BitmapCache() {
-            cache = new LruCache<String, Bitmap>(8 * 1024 * 1024){
+            cache = new LruCache<String, Bitmap>(8 * 1024 * 1024) {
                 @Override
                 protected int sizeOf(String key, Bitmap bitmap) {
                     return bitmap.getRowBytes() * bitmap.getHeight();
                 }
             };
         }
+
         @Override
         public Bitmap getBitmap(String url) {
             return cache.get(url);
@@ -78,7 +80,7 @@ public class VolleyUtils {
 
         @Override
         public void putBitmap(String url, Bitmap bitmap) {
-            cache.put(url,bitmap);
+            cache.put(url, bitmap);
         }
     }
 

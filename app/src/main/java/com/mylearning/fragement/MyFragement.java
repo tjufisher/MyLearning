@@ -1,21 +1,25 @@
 package com.mylearning.fragement;
 
-import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mylearning.R;
+import com.mylearning.activity.MyBaseInfoActivity;
+import com.mylearning.base.BaseFragement;
 import com.mylearning.common.Constants;
 import com.mylearning.utils.LogUtils;
+import com.mylearning.view.RoundImageView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -24,37 +28,45 @@ import butterknife.OnClick;
 /**
  * Created by user on 2015/8/17.
  */
-public class MyFragement extends Fragment {
-    @InjectView(R.id.personal_mine_base_avatar)
-    ImageView personalMineBaseAvatar;
-    @InjectView(R.id.personal_mine_title)
-    TextView personalMineTitle;
-    @InjectView(R.id.personal_mine_winning_time)
-    TextView personalMineWinningTime;
+public class MyFragement extends BaseFragement {
+
+
+    @InjectView(R.id.riv_base_info)
+    RoundImageView rivBaseInfo;
+    @InjectView(R.id.tv_base_info_title)
+    TextView tvBaseInfoTitle;
+    @InjectView(R.id.tv_base_info_phone)
+    TextView tvBaseInfoPhone;
     @InjectView(R.id.daily_arrow_right)
     ImageView dailyArrowRight;
-    @InjectView(R.id.personal_mine_base_info)
-    RelativeLayout personalMineBaseInfo;
-    @InjectView(R.id.personal_mine_bean_text)
-    TextView personalMineBeanText;
-    @InjectView(R.id.arrow_right)
-    ImageView arrowRight;
-    @InjectView(R.id.personal_mine_bean)
-    RelativeLayout personalMineBean;
+    @InjectView(R.id.rl_base_info)
+    RelativeLayout rlBaseInfo;
+    @InjectView(R.id.tv_balance)
+    TextView tvBalance;
+    @InjectView(R.id.tv_balance_des)
+    TextView tvBalanceDes;
+    @InjectView(R.id.ll_balance)
+    LinearLayout llBalance;
+    @InjectView(R.id.tv_hongbao)
+    TextView tvHongbao;
+    @InjectView(R.id.tv_hongbao_des)
+    TextView tvHongbaoDes;
+    @InjectView(R.id.ll_hongbao)
+    LinearLayout llHongbao;
+    @InjectView(R.id.tv_jf)
+    TextView tvJf;
+    @InjectView(R.id.tv_jf_des)
+    TextView tvJfDes;
+    @InjectView(R.id.ll_jf)
+    LinearLayout llJf;
+    @InjectView(R.id.ll_info)
+    LinearLayout llInfo;
     @InjectView(R.id.personal_mine_integral_label)
     TextView personalMineIntegralLabel;
-    @InjectView(R.id.personal_mine_integral_red_point)
-    ImageView personalMineIntegralRedPoint;
     @InjectView(R.id.personal_mine_integral_text)
     TextView personalMineIntegralText;
     @InjectView(R.id.personal_mine_integral)
     RelativeLayout personalMineIntegral;
-    @InjectView(R.id.personal_mine_comment_label)
-    TextView personalMineCommentLabel;
-    @InjectView(R.id.personal_mine_comment_text)
-    TextView personalMineCommentText;
-    @InjectView(R.id.personal_mine_comment)
-    RelativeLayout personalMineComment;
     @InjectView(R.id.personal_mine_message_label)
     TextView personalMineMessageLabel;
     @InjectView(R.id.personal_mine_message_red_point)
@@ -97,7 +109,6 @@ public class MyFragement extends Fragment {
     RelativeLayout personalMineUpdate;
     @InjectView(R.id.main_scrollview)
     ScrollView mainScrollview;
-
     private Context mContext;
 
     @Nullable
@@ -107,6 +118,8 @@ public class MyFragement extends Fragment {
         mContext = getActivity();
         View view = inflater.inflate(R.layout.fragement_my, container, false);
         ButterKnife.inject(this, view);
+
+
         return view;
     }
 
@@ -116,10 +129,15 @@ public class MyFragement extends Fragment {
         ButterKnife.reset(this);
     }
 
+    @OnClick(R.id.rl_base_info)
+    public void baseInfoClick() {
+        startActivityForAnima(new Intent(mContext, MyBaseInfoActivity.class));
+    }
+
     @OnClick(R.id.personal_mine_update)
-    public void change(){
+    public void change() {
         Constants.DEVELOP_POSITION = (Constants.DEVELOP_POSITION + 1) % 3;
-        switch (Constants.DEVELOP_POSITION){
+        switch (Constants.DEVELOP_POSITION) {
             case 0:
                 Toast.makeText(mContext, "default workspace", Toast.LENGTH_SHORT).show();
                 break;
