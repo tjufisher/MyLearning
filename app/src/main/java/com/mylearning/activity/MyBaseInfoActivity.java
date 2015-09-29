@@ -3,8 +3,10 @@ package com.mylearning.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -22,6 +24,7 @@ import com.mylearning.view.RoundImageView;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import butterknife.ButterKnife;
@@ -77,9 +80,11 @@ public class MyBaseInfoActivity extends BaseActivity {
     private Context mContext;
     private MiddlePopWindow popupWindow;
 
-    private static final int REQUEST_CODE_CAPTURE_CAMEIA = 0;//拍照
-    private static final int REQUEST_CODE_PICK_IMAGE = 1;//相册,SDK 19以上
-    private static final int REQUEST_CODE_PICK_IMAGE_OLD = 2;//相册,SDK 19以下
+    private static final int REQUEST_CODE_CAPTURE_CAMEIA = 0x0001;//拍照
+    private static final int REQUEST_CODE_PICK_IMAGE = 0x0002;//相册,SDK 19以上
+    private static final int REQUEST_CODE_PICK_IMAGE_OLD = 0x0003;//相册,SDK 19以下
+    private static final int REQUEST_CODE_CROP_SMALL = 0x0004;
+    private static final int REQUEST_CODE_CROP_BIG = 0x0005;
 
     File tempFile = null;
 
@@ -121,9 +126,17 @@ public class MyBaseInfoActivity extends BaseActivity {
 
                     break;
                 case R.id.btn_pick_photo:
-                    Intent intent = new Intent(Intent.ACTION_PICK);
+//                    Intent intentFromGallery = new Intent();
+//                    // 设置文件类型
+//                    intentFromGallery.setType("image/*");
+//                    intentFromGallery.setAction(Intent.ACTION_PICK);
+//                    startActivityForResult(intentFromGallery, CODE_GALLERY_REQUEST);
+
+
+
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setType("image/*");//相片类型
-                    startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
+//                    startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
                     if (android.os.Build.VERSION.SDK_INT >= 19) {
                         startActivityForResult(IntentUtils.createAlbumIntent(),
                                 REQUEST_CODE_PICK_IMAGE);
@@ -142,208 +155,81 @@ public class MyBaseInfoActivity extends BaseActivity {
         }
     } ;
 
-
+    Uri uri = null;
+    Bitmap photo = null;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
-//
-//
-//        if (resultCode == RESULT_OK) {
-//            imagePath = "";
-//            if (requestCode == PICK_PIC_CAMERA) {
-//                Uri uri = Uri.fromFile(tempFile);
-//                Log.e(tag, uri.toString());
-//                if (android.os.Build.VERSION.SDK_INT >= 19) {
-//                    AlbumAndComera.getImageClipIntent(uri, this, true);
-//                } else {
-//                    AlbumAndComera.getImageClipIntent(uri, this, false);
-//                }
-//
-//            } else if (requestCode == PICK_PIC_OLD || requestCode == PICK_PIC_KITKAT) {
-//                if (null == data) {
-//                    return;
-//                }
-//                albumUri = data.getData();
-//                tempFile = null;
-//                if (android.os.Build.VERSION.SDK_INT >= 19) {
-//                    AlbumAndComera.getImageClipIntent(albumUri, this, true);
-//                } else {
-//                    AlbumAndComera.getImageClipIntent(albumUri, this, false);
-//                }
-//
-//            } else if (requestCode == SoufunConstants.CHOOSE_CUT && null != data) {
-//                if (tempFile != null) {
-//                    try {
-//                        if (tempFile.length() > 0) {
-//                            String filePath = "";
-//
-//                            if (tempFile != null) {
-//                                if (tempFile.length() > 0) {
-//                                    options.inPreferredConfig = Bitmap.Config.RGB_565;
-//                                    try {
-//                                        filePath = tempFile.getAbsolutePath();
-//                                        imagePath = filePath;
-//                                        AlbumAndComera.compressForupload(imagePath);
-//                                    } catch (IOException e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                    if (!StringUtils.isNullOrEmpty(imagePath)) {
-//                                        showDialog = Utils.showProcessDialog(MyAcountActivity.this,
-//                                                "正在上传头像");
-//                                        new Thread(new Runnable() {
-//
-//                                            @Override
-//                                            public void run() {
-//                                                if (android.os.Build.VERSION.SDK_INT >= 19
-//                                                        || null == data.getData()) {
-//                                                    try {
-//                                                        Bitmap bitmap = (Bitmap) data.getExtras()
-//                                                                .getParcelable("data");
-//                                                        Uri uri = Uri.parse(MediaStore.Images.Media
-//                                                                .insertImage(getContentResolver(),
-//                                                                        bitmap, null, null));
-//                                                        imagePath = HttpApi.uploadFile(AlbumAndComera
-//                                                                .getAlbumPath(mContext, uri));
-//                                                    } catch (Exception e) {
-//                                                        imagePath = HttpApi.uploadFile(imagePath);
-//                                                    }
-//                                                } else {
-//                                                    imagePath = HttpApi.uploadFile(AlbumAndComera
-//                                                            .getAlbumPath(mContext, data));
-//                                                }
-//                                                imageUrl = imagePath;
-//                                                Log.i("hwq", "" + imageUrl);
-//                                                myPhotoTask = new MyPhotoTask();
-//                                                myPhotoTask.execute();
-//                                                mHandler.sendEmptyMessage(0);
-//                                            }
-//                                        }).start();
-//                                    }
-//                                }
-//                            } else {
-//                                toast("上传图片失败");
-//                                UtilsLog.e("msg", "上传图片失败");
-//                            }
-//                        }
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                } else {
-//                    if (android.os.Build.VERSION.SDK_INT >= 19 || null == data.getData()) {// 4.4之后
-//                        try {
-//
-//                            imagePath = AlbumAndComera.getAlbumPath(mContext, albumUri);
-//                            Log.i("MyCat", "return data(false):" + imagePath);
-//                            if (!StringUtils.isNullOrEmpty(imagePath)) {
-//                                showDialog = Utils.showProcessDialog(MyAcountActivity.this,
-//                                        "正在上传头像");
-//                                new Thread(new Runnable() {
-//
-//                                    @Override
-//                                    public void run() {
-//                                        try {
-//                                            Bitmap bitmap = (Bitmap) data.getExtras()
-//                                                    .getParcelable("data");
-//                                            Uri uri = Uri.parse(MediaStore.Images.Media
-//                                                    .insertImage(getContentResolver(), bitmap,
-//                                                            null, null));
-//                                            imagePath = HttpApi.uploadFile(AlbumAndComera
-//                                                    .getAlbumPath(mContext, uri));
-//                                        } catch (Exception e) {
-//                                            imagePath = HttpApi.uploadFile(AlbumAndComera
-//                                                    .getAlbumPath(mContext, albumUri));
-//                                        }
-//                                        imageUrl = imagePath;
-//                                        myPhotoTask = new MyPhotoTask();
-//                                        myPhotoTask.execute();
-//                                        mHandler.sendEmptyMessage(0);
-//                                    }
-//                                }).start();
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    } else {// 4.4之前
-//                        InputStream is = null;
-//                        String filePath = "";
-//                        options.inPreferredConfig = Bitmap.Config.RGB_565;
-//                        Uri uri = data.getData();
-//                        try {
-//                            ContentResolver contentResolver = mContext.getContentResolver();
-//                            is = contentResolver.openInputStream(uri);
-//                            filePath = AlbumAndComera.convertStream2File(is);
-//                            imagePath = filePath;
-//                            AlbumAndComera.compressForupload(imagePath);
-//                        } catch (FileNotFoundException e) {
-//                            e.printStackTrace();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                        if (!StringUtils.isNullOrEmpty(imagePath)) {
-//                            showDialog = Utils.showProcessDialog(MyAcountActivity.this, "正在上传头像");
-//                            new Thread(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    imagePath = HttpApi.uploadFile(AlbumAndComera.getAlbumPath(
-//                                            mContext, data));
-//                                    imageUrl = imagePath;
-//                                    myPhotoTask = new MyPhotoTask();
-//                                    myPhotoTask.execute();
-//                                    mHandler.sendEmptyMessage(0);
-//                                }
-//                            }).start();
-//                        }
-//                    }
-//                }
-//            } else if (requestCode == 100) {
-//                setResult(RESULT_OK);
-//                finish();
-//            } else if (requestCode == 520) {
-//                String mobile_new = data.getStringExtra("mobile_new");
-//                if (!StringUtils.isNullOrEmpty(mobile_new)) {
-//                    tv_telephone2.setText(mobile_new);
-//                }
-//            }
-//        }
-//
-//
-//        
-
-
-
-
-
-        Uri uri = null;
-        switch (requestCode){
-            case  REQUEST_CODE_CAPTURE_CAMEIA:
-                uri = data.getData();
-                if(uri == null) {
-                    //use bundle to get data
-                    Bundle bundle = data.getExtras();
-                    if (bundle != null) {
-                        Bitmap photo = (Bitmap) bundle.get("data"); //get bitmap
-                        //spath :生成图片取个名字和路径包含类型
-                        String spath = "";
-                        saveImage(photo, spath);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "err****", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                }
+        if( resultCode == RESULT_OK){
+            switch (requestCode){
+                case  REQUEST_CODE_CAPTURE_CAMEIA:
+                    uri = Uri.fromFile(tempFile);
+                    cropRawPhoto(uri, true);
                     break;
-            case REQUEST_CODE_PICK_IMAGE:
-                uri = data.getData();
-                break;
-             case REQUEST_CODE_PICK_IMAGE_OLD:
-                uri = data.getData();
-                break;
-
-            default:
-                break;
+                case REQUEST_CODE_PICK_IMAGE:
+                    uri = data.getData();
+                    cropRawPhoto(uri, false);
+                    break;
+                case REQUEST_CODE_PICK_IMAGE_OLD:
+                    uri = data.getData();
+                    cropRawPhoto(uri, false);
+                    break;
+                case REQUEST_CODE_CROP_SMALL:
+                    Bundle extras = data.getExtras();
+                    if (extras != null) {
+                        photo = extras.getParcelable("data");
+                        rivHeaderPhoto.setImageBitmap(photo);
+                    }
+                    break;
+                case REQUEST_CODE_CROP_BIG:
+                   if( uri != null){
+                       try {
+                           photo = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+                       } catch (FileNotFoundException e) {
+                           e.printStackTrace();
+                       }
+                       rivHeaderPhoto.setImageBitmap(photo);
+                   }
+                    break;
+                default:
+                    break;
+            }
+            LogUtils.i("URI", uri.toString());
         }
-        LogUtils.i("URI",uri.toString());
+
+
+    }
+
+    /**
+     * 裁剪原始的图片
+     */
+    public void cropRawPhoto(Uri uri, boolean isBig) {
+
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+
+        // 设置裁剪
+        intent.putExtra("crop", "true");
+
+        // aspectX , aspectY :宽高的比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+
+        // outputX , outputY : 裁剪图片宽高
+        intent.putExtra("outputX", 225);
+        intent.putExtra("outputY", 225);
+        intent.putExtra("scale", true);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("noFaceDetection", true); // no face detection
+        if( isBig){
+            intent.putExtra("return-data", false);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            startActivityForResult(intent, REQUEST_CODE_CROP_BIG);
+        } else {
+            intent.putExtra("return-data", true);
+            startActivityForResult(intent, REQUEST_CODE_CROP_SMALL);
+        }
+
     }
 
     public static void saveImage(Bitmap photo, String spath) {
