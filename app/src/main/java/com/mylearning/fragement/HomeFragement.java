@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -20,6 +21,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -35,6 +37,7 @@ import com.baidu.mapapi.utils.DistanceUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.mylearning.R;
+import com.mylearning.activity.SplashActivity;
 import com.mylearning.adapter.HomeListAdapter;
 import com.mylearning.common.App;
 import com.mylearning.common.Constants;
@@ -196,6 +199,15 @@ public class HomeFragement extends Fragment {
 //        lv.setAdapter(myListAdapter);
         homeListAdapter = new HomeListAdapter(mContext);
         lv.setAdapter(homeListAdapter);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = null;
+                intent.setClass(mContext, SplashActivity.class);
+                homeContentList.get(position);
+            }
+        });
 
     }
 
