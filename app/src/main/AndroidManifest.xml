@@ -73,6 +73,10 @@
         <activity android:name=".example.VerifyTextViewActivity"/>
         <activity android:name=".example.RoundImageViewActivity"/>
         <activity android:name=".activity.MyBaseInfoActivity"/>
+        <activity android:name=".example.PostViewActivity"/>
+        <activity android:name=".example.ErazerViewActivity"/>
+        <activity android:name=".example.FontViewActivity"/>
+        <activity android:name=".example.MatrixImageViewActivity"/>
 
 
     </application>

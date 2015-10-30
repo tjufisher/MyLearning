@@ -57,13 +57,23 @@ public class NoteFragement extends Fragment {
     }
 
     public void initDatas(){
-        ClassLink cl = new ClassLink();
-        cl.title = "VerifyTextView Example";
-        cl.className = "com.mylearning.example.VerifyTextViewActivity";
+        ClassLink cl = null;
+        cl = new ClassLink("VerifyTextViewActivity");
         arr.add(cl);
-        cl = new ClassLink();
-        cl.title = "RoundImageViewActivity Example";
-        cl.className = "com.mylearning.example.RoundImageViewActivity";
+
+        cl = new ClassLink("RoundImageViewActivity");
+        arr.add(cl);
+
+        cl = new ClassLink("PostViewActivity");
+        arr.add(cl);
+
+        cl = new ClassLink("ErazerViewActivity");
+        arr.add(cl);
+
+        cl = new ClassLink("FontViewActivity");
+        arr.add(cl);
+
+        cl = new ClassLink("MatrixImageViewActivity");
         arr.add(cl);
 
 
@@ -114,13 +124,13 @@ public class NoteFragement extends Fragment {
             }else{
                 viewHolder = (ViewHolder)convertView.getTag();
             }
-            viewHolder.tv.setText(arr.get(position).title);
+            viewHolder.tv.setText(arr.get(position).getTitle());
             viewHolder.tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Class c = null;
                     try {
-                        c = Class.forName(arr.get(position).className);
+                        c = Class.forName(arr.get(position).getClassName());
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
