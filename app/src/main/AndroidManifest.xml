@@ -77,6 +77,16 @@
         <activity android:name=".example.ErazerViewActivity"/>
         <activity android:name=".example.FontViewActivity"/>
         <activity android:name=".example.MatrixImageViewActivity"/>
+        <activity android:name=".example.MultiCircleViewActivity"/>
+        <activity android:name=".example.ServicesActivity"/>
+
+
+        <service android:name=".services.MyService"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="com.IMyAidlInterface"/>
+            </intent-filter>
+        </service>
 
 
     </application>

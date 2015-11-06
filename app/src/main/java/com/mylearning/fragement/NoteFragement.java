@@ -56,7 +56,7 @@ public class NoteFragement extends Fragment {
         return view;
     }
 
-    public void initDatas(){
+    public void initDatas() {
         ClassLink cl = null;
         cl = new ClassLink("VerifyTextViewActivity");
         arr.add(cl);
@@ -74,6 +74,12 @@ public class NoteFragement extends Fragment {
         arr.add(cl);
 
         cl = new ClassLink("MatrixImageViewActivity");
+        arr.add(cl);
+
+        cl = new ClassLink("MultiCircleViewActivity");
+        arr.add(cl);
+
+        cl = new ClassLink("ServicesActivity");
         arr.add(cl);
 
 
@@ -95,9 +101,10 @@ public class NoteFragement extends Fragment {
     public class MyAdapter extends BaseAdapter {
         private LayoutInflater mInflater = null;
 
-        MyAdapter(Context context){
+        MyAdapter(Context context) {
             mInflater = LayoutInflater.from(context);
         }
+
         @Override
         public int getCount() {
             return arr.size();
@@ -116,13 +123,13 @@ public class NoteFragement extends Fragment {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
-            if(convertView == null){
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
-                convertView = mInflater.inflate(R.layout.item_list_view,null);
-                viewHolder.tv = (TextView)convertView.findViewById(R.id.tv);
+                convertView = mInflater.inflate(R.layout.item_list_view, null);
+                viewHolder.tv = (TextView) convertView.findViewById(R.id.tv);
                 convertView.setTag(viewHolder);
-            }else{
-                viewHolder = (ViewHolder)convertView.getTag();
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
             }
             viewHolder.tv.setText(arr.get(position).getTitle());
             viewHolder.tv.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +148,7 @@ public class NoteFragement extends Fragment {
             return convertView;
         }
 
-        public class ViewHolder{
+        public class ViewHolder {
             TextView tv;
         }
     }
