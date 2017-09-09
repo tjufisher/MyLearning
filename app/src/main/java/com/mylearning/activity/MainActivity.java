@@ -47,6 +47,7 @@ public class MainActivity extends BaseActivity implements CompoundButton.OnCheck
         mContext = this;
         initDatas();
 
+		//test
         lastTabIndex = 0;
         radioButtons[0].setSelected(true);
         getFragmentManager().beginTransaction().add(flContainer.getId(), tabs[0], TAG_CURRENT_FRAGMENT + 0)
